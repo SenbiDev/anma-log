@@ -14,7 +14,10 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  Root: NavigatorScreenParams<RootBottomTabParamList> | undefined;
+  AnimeListScreen: undefined;
+  TopAnimeListScreen: undefined;
+  TopMangaListScreen: undefined;
   Modal: undefined;
   NotFound: undefined;
 };
@@ -24,12 +27,27 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
   Screen
 >;
 
-export type RootTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+export type RootBottomTabParamList = {
+  Anime: undefined;
+  Manga: undefined;
+  Search: undefined;
+  Seasonal: NavigatorScreenParams<RootSeasonalTopTabParamList> | undefined;
+  Favorites: NavigatorScreenParams<RootFavoritesTopTabParamList> | undefined;
 };
 
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<RootTabParamList, Screen>,
+export type RootTabScreenProps<Screen extends keyof RootBottomTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+export type RootSeasonalTopTabParamList = {
+  Last: undefined;
+  Now: undefined;
+  ['Up Coming']: undefined;
+  Archive: undefined;
+};
+
+export type RootFavoritesTopTabParamList = {
+  Anime: undefined;
+  Manga: undefined;
+};
