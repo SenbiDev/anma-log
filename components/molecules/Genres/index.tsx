@@ -23,7 +23,9 @@ function Genres({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
             }
         }
 
-        fetchGenres()
+        setTimeout(() => {
+            fetchGenres()
+        },1000)
     }, []);
 
     return (

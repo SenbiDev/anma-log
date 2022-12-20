@@ -18,6 +18,7 @@ export type RootStackParamList = {
   AnimeListScreen: undefined;
   TopAnimeListScreen: undefined;
   TopMangaListScreen: undefined;
+  SeasonalListScreen: undefined;
   Modal: undefined;
   NotFound: undefined;
 };

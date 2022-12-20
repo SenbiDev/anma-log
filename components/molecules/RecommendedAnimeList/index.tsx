@@ -25,15 +25,17 @@ function RecommendedAnimeList({type}: {type: 'anime' | 'manga'}) {
             }
             setRecommendedAnimeList(top10RecommendedAnimeList.reverse());
         }
-
-        fetchRecommendedAnimeList()
+        
+        setTimeout(() => {
+            fetchRecommendedAnimeList()
+        },500);
     }, []);
 
     return (
         <ScrollView style={{ marginLeft: 24 }} horizontal showsHorizontalScrollIndicator={false}>
             {recommendedAnimeList?.map(({title, images}, index) => (
                 <ViewDefault key={index} style={{ flexDirection: 'row' }} >
-                    <ImageBackground size='m' source={{ uri: images.jpg.large_image_url }} >
+                    <ImageBackground size='m' source={{ uri: images.webp.large_image_url }} >
                         <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 8, paddingBottom: 20 }}>
                             <TextDefault style={{ color: 'white', fontSize: 12 }}>
                                 {title}

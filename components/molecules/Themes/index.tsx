@@ -5,7 +5,7 @@ import Gap from '../../atoms/Gap/Gap'
 
 function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
     const [themes, setThemes] = useState<[[{ name: string; mal_id: string; }, { name: string; mal_id: string; }]]>();
-    // console.log('R:', (['hi', 'gojou'] !== [null, null]))
+
     useEffect(() => {
         async function fetchThemes() {
             try {
@@ -39,7 +39,9 @@ function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
             }
         }
 
-        fetchThemes()
+        setTimeout(() => {
+            fetchThemes()
+        },1500)
     }, []);
 
     return (

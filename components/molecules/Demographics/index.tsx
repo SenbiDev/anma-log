@@ -22,7 +22,9 @@ function Demographics({type, navigation}: {type: 'anime' | 'manga', navigation: 
             }
         }
 
-        fetchDemographics()
+        setTimeout(() => {
+            fetchDemographics()
+        },2000)
     }, []);
 
     return (

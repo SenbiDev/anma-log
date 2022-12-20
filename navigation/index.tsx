@@ -7,7 +7,7 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ColorSchemeName, Pressable, StyleSheet, View as ViewDefault, StatusBar, Image, ImageBackground as ImgB, ScrollView, Text as TextDefault, TouchableOpacity } from 'react-native';
 import ImageBackground from '../components/molecules/ImageBackground/ImageBackground';
 import Colors from '../constants/Colors';
@@ -44,9 +44,10 @@ import TopAnimeList from '../components/molecules/TopAnimeList';
 import AnimeList from '../components/molecules/AnimeList';
 import TopThreeManga from '../components/molecules/TopThreeManga';
 import TopMangaList from '../components/molecules/TopMangaList';
+import SearchResult from '../components/molecules/SearchResult';
 
 
-function AnimeScreen({navigation}: any) {
+function AnimeScreen({ navigation }: any) {
   return (
     <ScrollView>
       <ViewDefault style={styles.container}>
@@ -70,13 +71,13 @@ function AnimeScreen({navigation}: any) {
 
         <View style={{ marginHorizontal: 24, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
           <GradientText style={{ fontSize: 14, fontWeight: '600' }} >Top Anime</GradientText>
-          <TouchableOpacity  onPress={() => navigation.navigate('TopAnimeListScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('TopAnimeListScreen')}>
             <Text style={{ fontSize: 12 }}>more</Text>
           </TouchableOpacity>
         </View>
         <Gap height={15} />
         <TopThreeAnime />
-        
+
         {/* <TopAnime />
         <Gap height={15} />
         <TopAnime />
@@ -86,7 +87,7 @@ function AnimeScreen({navigation}: any) {
   )
 }
 
-function MangaScreen({navigation}: any) {
+function MangaScreen({ navigation }: any) {
   return (
     <ScrollView>
       <ViewDefault style={styles.container}>
@@ -110,7 +111,7 @@ function MangaScreen({navigation}: any) {
 
         <View style={{ marginHorizontal: 24, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
           <GradientText style={{ fontSize: 14, fontWeight: '600' }} >Top Manga</GradientText>
-          <TouchableOpacity  onPress={() => navigation.navigate('TopMangaListScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('TopMangaListScreen')}>
             <Text style={{ fontSize: 12 }}>more</Text>
           </TouchableOpacity>
         </View>
@@ -149,8 +150,10 @@ function SearchScreen() {
         />
       </View>
       <Gap height={30} />
-      <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Result</GradientText>
-      <Gap height={20} />
+      {/* <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Result</GradientText>
+      <Gap height={20} /> */}
+      <SearchResult type={title.toLowerCase()} letter={text} />
+
       {/* <TopAnime />
       <Gap height={15} />
       <TopAnime />
@@ -173,7 +176,7 @@ function FavoritesScreen() {
   )
 }
 
-function AnimeListScreen({route}: any) {
+function AnimeListScreen({ route }: any) {
   const { type, mal_id } = route.params
   return (
     <ScrollView>
@@ -185,7 +188,7 @@ function AnimeListScreen({route}: any) {
 function TopAnimeListScreen() {
   return (
     <ScrollView>
-        <TopAnimeList />
+      <TopAnimeList />
     </ScrollView>
   )
 }
@@ -193,7 +196,7 @@ function TopAnimeListScreen() {
 function TopMangaListScreen() {
   return (
     <ScrollView>
-        <TopMangaList />
+      <TopMangaList />
     </ScrollView>
   )
 }
@@ -204,44 +207,198 @@ function AnimeDetailScreen() {
   )
 }
 
-function ArchiveListScreen() {
+function ArchiveListScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }} >
       <Gap height={30} />
-      <ArchiveList />
+      <ArchiveList navigation={navigation} />
     </View>
   )
 }
 
-function SeasonalArchiveScreen() {
+function SeasonalListScreen({ route }: any) {
+  const { year, season } = route.params
+  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+
+  useEffect(() => {
+    async function fetchNowSeasonal() {
+      const result1 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=1`);
+      const parseResult1 = await result1.json();
+      const nowSeasonalList1 = await parseResult1.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result2 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=2`);
+      const parseResult2 = await result2.json();
+      const nowSeasonalList2 = await parseResult2.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result3 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=3`);
+      const parseResult3 = await result3.json();
+      const nowSeasonalList3 = await parseResult3.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
+      // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
+      setSeasonalList(nowSeasonalList);
+    }
+
+    fetchNowSeasonal();
+  }, []);
+
   return (
-    <>Seasonal Archive Screen</>
+    <View style={{ flex: 1 }} >
+      <Gap height={30} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={`${season.toUpperCase()} ${year}`} />
+    </View>
   )
 }
 
 function LastSeasonalScreen() {
+  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+  const [seasonal, setSeasonal] = useState('');
+
+  useEffect(() => {
+    async function fetchNowSeasonal() {
+      const result = await fetch('https://api.jikan.moe/v4/seasons/now?page=1');
+      const parseResult = await result.json();
+      const nowSeasonal = await parseResult.data.map(({ season, year }: { season: string, year: number }) => ({ season, year }));
+      const getLastSeason: { [index: string]: string } = {
+        winter: 'fall',
+        spring: 'winter',
+        summer: 'spring',
+        fall: 'summer',
+      }
+      const season = getLastSeason[nowSeasonal[0].season]
+      const year = (getLastSeason[nowSeasonal[0].season] === 'fall') ? nowSeasonal[0].year - 1 : nowSeasonal[0].year;
+
+      const result1 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=1`);
+      const parseResult1 = await result1.json();
+      const nowSeasonalList1 = await parseResult1.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result2 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=2`);
+      const parseResult2 = await result2.json();
+      const nowSeasonalList2 = await parseResult2.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result3 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=3`);
+      const parseResult3 = await result3.json();
+      const nowSeasonalList3 = await parseResult3.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
+      // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
+      setSeasonal(`${season.toUpperCase()} ${year}`);
+      setSeasonalList(nowSeasonalList);
+    }
+
+    fetchNowSeasonal();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
-      <GradientText style={{ fontSize: 10 }} >LastSeasonalScreen</GradientText>
+      <Gap height={30} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
     </View>
   )
 }
 
 function NowSeasonalScreen() {
+  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+  const [seasonal, setSeasonal] = useState('');
+
+  useEffect(() => {
+    async function fetchNowSeasonal() {
+      const result1 = await fetch('https://api.jikan.moe/v4/seasons/now?page=1');
+      const parseResult1 = await result1.json();
+      const nowSeasonalList1 = await parseResult1.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result2 = await fetch('https://api.jikan.moe/v4/seasons/now?page=2');
+      const parseResult2 = await result2.json();
+      const nowSeasonalList2 = await parseResult2.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result3 = await fetch('https://api.jikan.moe/v4/seasons/now?page=3');
+      const parseResult3 = await result3.json();
+      const nowSeasonalList3 = await parseResult3.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
+      // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
+      setSeasonal(`${nowSeasonalList[0].season.toUpperCase()} ${nowSeasonalList[0].year}`)
+      setSeasonalList(nowSeasonalList);
+    }
+
+    fetchNowSeasonal();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >2022 Fall</GradientText>
-      <Gap height={20} />
-      <AnimeCardList />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
     </View>
   )
 }
 
 function UpComingSeasonalScreen() {
+  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+  const [seasonal, setSeasonal] = useState('');
+
+  useEffect(() => {
+    async function fetchUpComingSeasonal() {
+      const result1 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=1');
+      const parseResult1 = await result1.json();
+      const upComingSeasonalList1 = await parseResult1.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result2 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=2');
+      const parseResult2 = await result2.json();
+      const upComingSeasonalList2 = await parseResult2.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const result3 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=3');
+      const parseResult3 = await result3.json();
+      const upComingSeasonalList3 = await parseResult3.data
+        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+          const genreList = genres.map(({ name }: { name: string }) => name);
+          return { images, title, genreList, aired, members, score, season, year }
+        });
+      const upComingSeasonalList = [...upComingSeasonalList1, ...upComingSeasonalList2, ...upComingSeasonalList3]
+      // console.log('Top Anime List', JSON.stringify(upComingSeasonalList, null, 4));
+      setSeasonal(`${upComingSeasonalList[0]?.season?.toUpperCase() ?? 'UP'} ${upComingSeasonalList[0]?.year ?? 'COMING'}`)
+      setSeasonalList(upComingSeasonalList);
+    }
+
+    fetchUpComingSeasonal();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
-      <GradientText style={{ fontSize: 10 }} >UpComingSeasonalScreen</GradientText>
+      <Gap height={30} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
     </View>
   )
 }
@@ -249,8 +406,7 @@ function UpComingSeasonalScreen() {
 function AnimeFavoritesListScreen() {
   return (
     <View style={{ flex: 1 }}>
-      <Gap height={30} />
-      <AnimeCardList />
+
     </View>
   )
 }
@@ -286,6 +442,7 @@ function RootNavigator() {
       <Stack.Screen name="AnimeListScreen" component={AnimeListScreen} options={{ headerTitle: 'Anime List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="TopAnimeListScreen" component={TopAnimeListScreen} options={{ headerTitle: 'Top Anime List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="TopMangaListScreen" component={TopMangaListScreen} options={{ headerTitle: 'Top Manga List', headerTitleAlign: 'center' }} />
+      <Stack.Screen name="SeasonalListScreen" component={SeasonalListScreen} options={{ headerTitle: 'Seasonal Anime List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
