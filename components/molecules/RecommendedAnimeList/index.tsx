@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View as ViewDefault, Text as TextDefault, ScrollView } from 'react-native'
+import { View as ViewDefault, Text as TextDefault, ScrollView, TouchableOpacity } from 'react-native'
 import ImageBackground from '../ImageBackground/ImageBackground'
 import Gap from '../../atoms/Gap/Gap'
 
-function RecommendedAnimeList({type}: {type: 'anime' | 'manga'}) {
-    const [recommendedAnimeList, setRecommendedAnimeList] = useState<{ title: string; images: any; }[]>();
+function RecommendedAnimeList({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
+    const [recommendedAnimeList, setRecommendedAnimeList] = useState<{ mal_id: number, title: string; images: any; }[]>();
 
     useEffect(() => {
         async function fetchRecommendedAnimeList() {
@@ -16,7 +16,7 @@ function RecommendedAnimeList({type}: {type: 'anime' | 'manga'}) {
             const matriks2 = entry.map((matrik: any) => matrik[1])
 
             // =2=
-            const titleAndImageList = [...matriks1.map(({title, images}: any) => ({title, images})), ...matriks2.map(({title, images}: any) => ({title, images}))]
+            const titleAndImageList = [...matriks1.map(({ mal_id, title, images }: any) => ({mal_id, title, images})), ...matriks2.map(({ mal_id, title, images }: any) => ({ mal_id, title, images }))]
             // console.log('Title and Image List:', JSON.stringify(titleAndImageList, null, 4))
             // console.log('Title and Image List Total:', titleAndImageList.length)
             const top10RecommendedAnimeList = []
@@ -33,8 +33,8 @@ function RecommendedAnimeList({type}: {type: 'anime' | 'manga'}) {
 
     return (
         <ScrollView style={{ marginLeft: 24 }} horizontal showsHorizontalScrollIndicator={false}>
-            {recommendedAnimeList?.map(({title, images}, index) => (
-                <ViewDefault key={index} style={{ flexDirection: 'row' }} >
+            {recommendedAnimeList?.map(({ mal_id, title, images }, index) => (
+                <TouchableOpacity key={index} style={{ flexDirection: 'row' }} onPress={() => navigation.navigate(type === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })} >
                     <ImageBackground size='m' source={{ uri: images.webp.large_image_url }} >
                         <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 8, paddingBottom: 20 }}>
                             <TextDefault style={{ color: 'white', fontSize: 12 }}>
@@ -43,7 +43,7 @@ function RecommendedAnimeList({type}: {type: 'anime' | 'manga'}) {
                         </ViewDefault>
                     </ImageBackground>
                     <Gap width={15} />
-                </ViewDefault>
+                </TouchableOpacity>
             ))}
             <Gap width={9} />
         </ScrollView>

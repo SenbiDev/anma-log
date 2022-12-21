@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 
-function TopMangaList() {
-    const [topManga, setTopManga] = useState<{ images: any, title: string, type: string, volumes: number, published: any, members: number, score: number }[]>();
+function TopMangaList({navigation}: any) {
+    const [topManga, setTopManga] = useState<{  mal_id: number, images: any, title: string, type: string, volumes: number, published: any, members: number, score: number }[]>();
 
     useEffect(() => {
         async function fetchTopManga() {
             try {
                 const result = await fetch('https://api.jikan.moe/v4/top/manga?type=manga');
                 const parseResult = await result.json();
-                const topMangaList = parseResult?.data?.map(({ images, title, type, volumes, published, members, score }: { images: any, title: string, type: string, volumes: number, published: any, members: number, score: number }) => ({ images, title, type, volumes, published, members, score }));
+                const topMangaList = parseResult?.data?.map(({  mal_id, images, title, type, volumes, published, members, score }: {  mal_id: number, images: any, title: string, type: string, volumes: number, published: any, members: number, score: number }) => ({  mal_id, images, title, type, volumes, published, members, score }));
                 // console.log('Top Manga List', JSON.stringify(topMangaList, null, 4));
                 setTopManga(topMangaList);
             } catch {
@@ -24,11 +24,11 @@ function TopMangaList() {
 
     return (
         <>
-            {topManga?.map(({ images, title, type, volumes, published, members, score }, index) => (
-                <View key={index}>
+            {topManga?.map(({  mal_id, images, title, type, volumes, published, members, score }, index) => (
+                <TouchableOpacity key={index} onPress={() => navigation.navigate('MangaDetailScreen', { mal_id })}>
                     <TopAnime images={images} title={title} type={type} volumes={volumes} published={published} members={members} score={score} />
                     <Gap height={15} />
-                </View>
+                </TouchableOpacity>
             ))}
         </>
     )

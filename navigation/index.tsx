@@ -33,7 +33,6 @@ import RecommendedAnimeList from '../components/molecules/RecommendedAnimeList';
 import Genres from '../components/molecules/Genres';
 import Themes from '../components/molecules/Themes';
 import Demographics from '../components/molecules/Demographics';
-import TopAnime from '../components/molecules/TopAnime';
 import Accordion from '../components/atoms/Accordion';
 import TextInput from '../components/atoms/TextInput';
 import AnimeCardList from '../components/molecules/AnimeCardList';
@@ -54,7 +53,7 @@ function AnimeScreen({ navigation }: any) {
         {/* <StatusBar backgroundColor="#61dafb" /> */}
         <GradientText style={{ fontSize: 14, marginTop: 24, marginLeft: 24, fontWeight: '600' }} >Recommended Anime</GradientText>
         <Gap height={15} />
-        <RecommendedAnimeList type='anime' />
+        <RecommendedAnimeList type='anime' navigation={navigation} />
         <Gap height={50} />
         <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Genres</GradientText>
         <Gap height={12} />
@@ -76,12 +75,7 @@ function AnimeScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
         <Gap height={15} />
-        <TopThreeAnime />
-
-        {/* <TopAnime />
-        <Gap height={15} />
-        <TopAnime />
-        <Gap height={15} /> */}
+        <TopThreeAnime navigation={navigation} />
       </ViewDefault>
     </ScrollView>
   )
@@ -94,7 +88,7 @@ function MangaScreen({ navigation }: any) {
         {/* <StatusBar backgroundColor="#61dafb" /> */}
         <GradientText style={{ fontSize: 14, marginTop: 24, marginLeft: 24, fontWeight: '600' }} >Recommended Manga</GradientText>
         <Gap height={15} />
-        <RecommendedAnimeList type='manga' />
+        <RecommendedAnimeList type='manga' navigation={navigation} />
         <Gap height={50} />
         <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Genres</GradientText>
         <Gap height={12} />
@@ -116,20 +110,13 @@ function MangaScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
         <Gap height={15} />
-        <TopThreeManga />
-
-        {/* <TopAnime />
-        <Gap height={15} />
-        <TopAnime />
-        <Gap height={15} />
-        <TopAnime />
-        <Gap height={15} /> */}
+        <TopThreeManga navigation={navigation} />
       </ViewDefault>
     </ScrollView>
   )
 }
 
-function SearchScreen() {
+function SearchScreen({ navigation }: any) {
   const [title, setTitle] = React.useState('Anime');
   const [text, setText] = React.useState("");
 
@@ -152,14 +139,7 @@ function SearchScreen() {
       <Gap height={30} />
       {/* <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Result</GradientText>
       <Gap height={20} /> */}
-      <SearchResult type={title.toLowerCase()} letter={text} />
-
-      {/* <TopAnime />
-      <Gap height={15} />
-      <TopAnime />
-      <Gap height={15} />
-      <TopAnime />
-      <Gap height={15} /> */}
+      <SearchResult types={title.toLowerCase()} letter={text} navigation={navigation} />
     </View>
   )
 }
@@ -176,34 +156,316 @@ function FavoritesScreen() {
   )
 }
 
-function AnimeListScreen({ route }: any) {
+function AnimeListScreen({ route, navigation }: any) {
   const { type, mal_id } = route.params
   return (
     <ScrollView>
-      <AnimeList type={type} id={mal_id} />
+      <AnimeList types={type} id={mal_id} navigation={navigation} />
     </ScrollView>
   )
 }
 
-function TopAnimeListScreen() {
+function TopAnimeListScreen({ navigation }: any) {
   return (
     <ScrollView>
-      <TopAnimeList />
+      <TopAnimeList navigation={navigation} />
     </ScrollView>
   )
 }
 
-function TopMangaListScreen() {
+function TopMangaListScreen({ navigation }: any) {
   return (
     <ScrollView>
-      <TopMangaList />
+      <TopMangaList navigation={navigation} />
     </ScrollView>
   )
 }
 
-function AnimeDetailScreen() {
+function AnimeDetailScreen({ route }: any) {
+  const { mal_id } = route.params
+  const [animeDetail, setAnimeDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, season: string, year: number, status: string, episodes: number, duration: string, synopsis: string, title_english: string, source: string, studioList: string[], aired: any, rating: string, licensorList: string[] }>();
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [toggle, setToggle] = useState(true);
+
+  const onFavoritePress = () => {
+    setIsFavorited(!isFavorited);
+  };
+
+  const onTogglePress = () => {
+    setToggle(!toggle);
+  };
+
+  useEffect(() => {
+    async function fetchAnimeDetail() {
+      try {
+        const result = await fetch(`https://api.jikan.moe/v4/anime/${mal_id}/full`);
+        const parseResult = await result.json();
+        const { title, genres, score, images, rank, popularity, members, favorites, type, season, year, status, episodes, duration, synopsis, title_english, source, studios, aired, rating, licensors } = parseResult?.data;
+        const genreList = genres.map(({ name }: { name: string }) => name);
+        const studioList = studios.map(({ name }: { name: string }) => name);
+        const licensorList = licensors.map(({ name }: { name: string }) => name);
+
+        // console.log('ANIME DETAIL', JSON.stringify(parseResult?.data, null, 4));
+
+        setAnimeDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, season, year, status, episodes, duration, synopsis, title_english, source, studioList, aired, rating, licensorList });
+
+      } catch {
+        alert('Koneksi Jaringan Lambat')
+      }
+    }
+
+    fetchAnimeDetail()
+  }, [])
+
   return (
-    <>Anime Detail Screen</>
+    <ScrollView style={{ padding: 24 }}>
+      <ViewDefault style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ViewDefault>
+          <Text style={{ width: 235, fontSize: 16 }} >{animeDetail?.title}</Text>
+          <Gap height={5} />
+          <Text style={{ fontSize: 12 }}>{animeDetail?.genreList.join(', ')}</Text>
+          <Gap height={5} />
+          <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
+            <Gap width={6} />
+            <TextDefault style={{ color: 'black', fontSize: 12, height: 20 }}>
+              {animeDetail?.score ?? 'Unknown'}
+            </TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={onFavoritePress} />
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+        <Image source={{ uri: animeDetail?.images.webp.large_image_url }} style={{ width: 225, height: 318, borderRadius: 10 }} />
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <ViewDefault style={{ alignItems: 'center' }} >
+          <TextDefault style={{ fontSize: 12 }}>Rank</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>#{animeDetail?.rank ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Popularity</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>#{animeDetail?.popularity ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Members</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{animeDetail?.members ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Favorites</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{animeDetail?.favorites ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <ViewDefault style={{ alignItems: 'center' }} >
+          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.type ?? 'Unknown'},`}</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
+        </ViewDefault>
+        <TextDefault style={{ fontSize: 12 }}>{animeDetail?.status}</TextDefault>
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.episodes ?? 'Unknown'} ep,`}</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.duration.replace(' per ep', '')}`}</TextDefault>
+        </ViewDefault>
+      </ViewDefault>
+      <Gap height={40} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <TextDefault style={{ fontSize: 14, fontWeight: '500' }}>Synopsis</TextDefault>
+      </ViewDefault>
+      <Gap height={13} />
+      <TextDefault style={{ fontSize: 12 }} numberOfLines={toggle ? 5 : 0}>{animeDetail?.synopsis ?? 'Unknown'}</TextDefault>
+      <Gap height={10} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color='black' sizes={20} boxHeight={24} onPress={onTogglePress} />
+      </ViewDefault>
+      <Gap height={40} />
+      <ViewDefault>
+        <TextDefault style={{ fontSize: 12 }}>English</TextDefault>
+        <TextDefault style={{ fontSize: 12 }}>{animeDetail?.title_english ?? 'Unknown'}</TextDefault>
+      </ViewDefault>
+      <Gap height={20} />
+
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+
+        <ViewDefault>
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Source</TextDefault>
+            <TextDefault style={{ fontSize: 12 }}>{animeDetail?.source ?? 'Unknown'}</TextDefault>
+          </ViewDefault>
+          <Gap height={20} />
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Studio</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{animeDetail?.studioList.join(', ') !== '' ? animeDetail?.studioList.join(', ') : 'Unknown'}</TextDefault>
+          </ViewDefault>
+          <Gap height={20} />
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Rating</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 43 }} numberOfLines={4} >{animeDetail?.rating ?? 'Unknown'}</TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+        <Gap width={80} />
+        <ViewDefault>
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Season</TextDefault>
+            <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.season?.toUpperCase() ?? 'Unknown'} ${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
+          </ViewDefault>
+          <Gap height={20} />
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Aired</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{animeDetail?.aired.string ?? 'Unknown'}</TextDefault>
+          </ViewDefault>
+          <Gap height={20} />
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Licensor</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 127 }} numberOfLines={4}>{animeDetail?.licensorList.join(', ') !== '' ? animeDetail?.licensorList.join(', ') : 'Unknown'}</TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+
+      </ViewDefault>
+      <Gap height={54} />
+    </ScrollView>
+  )
+}
+
+function MangaDetailScreen({ route }: any) {
+  const { mal_id } = route.params
+  const [mangaDetail, setMangaDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, status: string, volumes: number, chapters: number, synopsis: string, title_english: string, published: any, authorList: string[], serializationList: string[] }>();
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [toggle, setToggle] = useState(true);
+
+  const onFavoritePress = () => {
+    setIsFavorited(!isFavorited);
+  };
+
+  const onTogglePress = () => {
+    setToggle(!toggle);
+  };
+
+  useEffect(() => {
+    async function fetchMangaDetail() {
+      try {
+        const result = await fetch(`https://api.jikan.moe/v4/manga/${mal_id}/full`);
+        const parseResult = await result.json();
+        const { title, genres, score, images, rank, popularity, members, favorites, type, status, volumes, chapters, synopsis, title_english, published, authors, serializations } = parseResult?.data;
+        const genreList = genres.map(({ name }: { name: string }) => name);
+        const authorList = authors.map(({ name }: { name: string }) => name);
+        const serializationList = serializations.map(({ name }: { name: string }) => name);
+
+        // console.log('MANGA DETAIL', JSON.stringify(parseResult?.data, null, 4));
+
+        setMangaDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, status, volumes, chapters, synopsis, title_english, published, authorList, serializationList });
+
+      } catch {
+        alert('Koneksi Jaringan Lambat')
+      }
+    }
+
+    fetchMangaDetail()
+  }, [])
+
+  return (
+    <ScrollView style={{ padding: 24 }}>
+      <ViewDefault style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ViewDefault>
+          <Text style={{ width: 235, fontSize: 16 }} >{mangaDetail?.title}</Text>
+          <Gap height={5} />
+          <Text style={{ fontSize: 12, width: 235 }}>{mangaDetail?.genreList.join(', ')}</Text>
+          <Gap height={5} />
+          <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
+            <Gap width={6} />
+            <TextDefault style={{ color: 'black', fontSize: 12, height: 20 }}>
+              {mangaDetail?.score ?? 'Unknown'}
+            </TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={onFavoritePress} />
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+        <Image source={{ uri: mangaDetail?.images.webp.large_image_url }} style={{ width: 225, height: 318, borderRadius: 10 }} />
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <ViewDefault style={{ alignItems: 'center' }} >
+          <TextDefault style={{ fontSize: 12 }}>Rank</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>#{mangaDetail?.rank ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Popularity</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>#{mangaDetail?.popularity ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Members</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.members ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>Favorites</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.favorites ?? 'Unknown'}</TextDefault>
+        </ViewDefault>
+      </ViewDefault>
+      <Gap height={30} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <ViewDefault style={{ alignItems: 'center' }} >
+          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.type ?? 'Unknown'}`}</TextDefault>
+        </ViewDefault>
+        <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.status}</TextDefault>
+        <ViewDefault style={{ alignItems: 'center' }}>
+          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.volumes ?? 'Unknown'} vol,`}</TextDefault>
+          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.chapters ?? 'Unknown'} chp`}</TextDefault>
+        </ViewDefault>
+      </ViewDefault>
+      <Gap height={40} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <TextDefault style={{ fontSize: 14, fontWeight: '500' }}>Synopsis</TextDefault>
+      </ViewDefault>
+      <Gap height={13} />
+      <TextDefault style={{ fontSize: 12 }} numberOfLines={toggle ? 5 : 0}>{mangaDetail?.synopsis ?? 'Unknown'}</TextDefault>
+      <Gap height={10} />
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color='black' sizes={20} boxHeight={24} onPress={onTogglePress} />
+      </ViewDefault>
+      <Gap height={40} />
+      <ViewDefault>
+        <TextDefault style={{ fontSize: 12 }}>English</TextDefault>
+        <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.title_english ?? 'Unknown'}</TextDefault>
+      </ViewDefault>
+      <Gap height={20} />
+
+      <ViewDefault style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+
+        <ViewDefault>
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Published</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{mangaDetail?.published.string ?? 'Unknown'}</TextDefault>
+          </ViewDefault>
+          <Gap height={20} />
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Serialization</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{mangaDetail?.serializationList.join(', ') !== '' ? mangaDetail?.serializationList.join(', ') : 'Unknown'}</TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+
+        <Gap width={80} />
+
+        <ViewDefault>
+          <ViewDefault>
+            <TextDefault style={{ fontSize: 12 }}>Authors</TextDefault>
+            <TextDefault style={{ fontSize: 12, width: 127 }} numberOfLines={4}>{mangaDetail?.authorList.join(', ') !== '' ? mangaDetail?.authorList.join(', ') : 'Unknown'}</TextDefault>
+          </ViewDefault>
+        </ViewDefault>
+
+      </ViewDefault>
+      <Gap height={54} />
+    </ScrollView>
   )
 }
 
@@ -216,32 +478,32 @@ function ArchiveListScreen({ navigation }: any) {
   )
 }
 
-function SeasonalListScreen({ route }: any) {
+function SeasonalListScreen({ route, navigation }: any) {
   const { year, season } = route.params
-  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+  const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
 
   useEffect(() => {
     async function fetchNowSeasonal() {
       const result1 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=1`);
       const parseResult1 = await result1.json();
       const nowSeasonalList1 = await parseResult1.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result2 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=2`);
       const parseResult2 = await result2.json();
       const nowSeasonalList2 = await parseResult2.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result3 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=3`);
       const parseResult3 = await result3.json();
       const nowSeasonalList3 = await parseResult3.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
       // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
@@ -254,13 +516,13 @@ function SeasonalListScreen({ route }: any) {
   return (
     <View style={{ flex: 1 }} >
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={`${season.toUpperCase()} ${year}`} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={`${season.toUpperCase()} ${year}`} navigation={navigation} />
     </View>
   )
 }
 
-function LastSeasonalScreen() {
-  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+function LastSeasonalScreen({ navigation }: any) {
+  const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
   const [seasonal, setSeasonal] = useState('');
 
   useEffect(() => {
@@ -280,23 +542,23 @@ function LastSeasonalScreen() {
       const result1 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=1`);
       const parseResult1 = await result1.json();
       const nowSeasonalList1 = await parseResult1.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result2 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=2`);
       const parseResult2 = await result2.json();
       const nowSeasonalList2 = await parseResult2.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result3 = await fetch(`https://api.jikan.moe/v4/seasons/${year}/${season}?page=3`);
       const parseResult3 = await result3.json();
       const nowSeasonalList3 = await parseResult3.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
       // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
@@ -310,13 +572,13 @@ function LastSeasonalScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
 
-function NowSeasonalScreen() {
-  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+function NowSeasonalScreen({ navigation }: any) {
+  const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
   const [seasonal, setSeasonal] = useState('');
 
   useEffect(() => {
@@ -324,23 +586,23 @@ function NowSeasonalScreen() {
       const result1 = await fetch('https://api.jikan.moe/v4/seasons/now?page=1');
       const parseResult1 = await result1.json();
       const nowSeasonalList1 = await parseResult1.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result2 = await fetch('https://api.jikan.moe/v4/seasons/now?page=2');
       const parseResult2 = await result2.json();
       const nowSeasonalList2 = await parseResult2.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result3 = await fetch('https://api.jikan.moe/v4/seasons/now?page=3');
       const parseResult3 = await result3.json();
       const nowSeasonalList3 = await parseResult3.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const nowSeasonalList = [...nowSeasonalList1, ...nowSeasonalList2, ...nowSeasonalList3]
       // console.log('Top Anime List', JSON.stringify(nowSeasonalList, null, 4));
@@ -354,13 +616,13 @@ function NowSeasonalScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
 
-function UpComingSeasonalScreen() {
-  const [seasonalList, setSeasonalList] = useState<{ images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+function UpComingSeasonalScreen({ navigation }: any) {
+  const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
   const [seasonal, setSeasonal] = useState('');
 
   useEffect(() => {
@@ -368,23 +630,23 @@ function UpComingSeasonalScreen() {
       const result1 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=1');
       const parseResult1 = await result1.json();
       const upComingSeasonalList1 = await parseResult1.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result2 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=2');
       const parseResult2 = await result2.json();
       const upComingSeasonalList2 = await parseResult2.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const result3 = await fetch('https://api.jikan.moe/v4/seasons/upcoming?page=3');
       const parseResult3 = await result3.json();
       const upComingSeasonalList3 = await parseResult3.data
-        .map(({ images, title, genres, aired, members, score, season, year }: { images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
+        .map(({ mal_id, images, title, genres, aired, members, score, season, year }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, season: string, year: number }) => {
           const genreList = genres.map(({ name }: { name: string }) => name);
-          return { images, title, genreList, aired, members, score, season, year }
+          return { mal_id, images, title, genreList, aired, members, score, season, year }
         });
       const upComingSeasonalList = [...upComingSeasonalList1, ...upComingSeasonalList2, ...upComingSeasonalList3]
       // console.log('Top Anime List', JSON.stringify(upComingSeasonalList, null, 4));
@@ -398,7 +660,7 @@ function UpComingSeasonalScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} />
+      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
@@ -443,6 +705,8 @@ function RootNavigator() {
       <Stack.Screen name="TopAnimeListScreen" component={TopAnimeListScreen} options={{ headerTitle: 'Top Anime List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="TopMangaListScreen" component={TopMangaListScreen} options={{ headerTitle: 'Top Manga List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="SeasonalListScreen" component={SeasonalListScreen} options={{ headerTitle: 'Seasonal Anime List', headerTitleAlign: 'center' }} />
+      <Stack.Screen name="AnimeDetailScreen" component={AnimeDetailScreen} options={{ headerTitle: 'Anime Detail', headerTitleAlign: 'center' }} />
+      <Stack.Screen name="MangaDetailScreen" component={MangaDetailScreen} options={{ headerTitle: 'Manga Detail', headerTitleAlign: 'center' }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />

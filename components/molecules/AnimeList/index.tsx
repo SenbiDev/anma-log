@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 import { SolidMaterialIcons } from '../../atoms/Solid';
 
-function AnimeList({ type, id }: { type: 'anime' | 'manga', id: number }) {
-    const [animeList, setAnimeList] = useState<{ images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
+function AnimeList({ types, id, navigation }: { types: 'anime' | 'manga', id: number, navigation: any }) {
+    const [animeList, setAnimeList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
     const [text, setText] = useState('1');
     const [limitPage, setLimitPage] = useState(5);
     console.log('check infinite loop')
@@ -14,9 +14,9 @@ function AnimeList({ type, id }: { type: 'anime' | 'manga', id: number }) {
     useEffect(() => {
         async function fetchTopAnime() {
             try {
-                const result = await fetch(`https://api.jikan.moe/v4/${type}?genres=${id}&page=${text}`);
+                const result = await fetch(`https://api.jikan.moe/v4/${types}?genres=${id}&page=${text}`);
                 const parseResult = await result.json();
-                const animeList = parseResult?.data?.map(({ images, title, type, episodes, volumes, aired, published, members, score }: { images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }) => ({ images, title, type, episodes, volumes, aired, published, members, score }));
+                const animeList = parseResult?.data?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }: { mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }) => ({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }));
                 const limit = parseResult?.pagination.last_visible_page;
                 // console.log('Anime List', JSON.stringify(topAnimeList, null, 4));
 
@@ -69,11 +69,11 @@ function AnimeList({ type, id }: { type: 'anime' | 'manga', id: number }) {
 
     return (
         <View>
-            {animeList?.map(({ images, title, type, episodes, volumes, aired, published, members, score }, index) => (
-                <View key={index}>
+            {animeList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
+                <TouchableOpacity key={index} onPress={() => navigation.navigate( types === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })}>
                     <TopAnime images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} />
                     <Gap height={15} />
-                </View>
+                </TouchableOpacity>
             ))}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 24 }} >
                 <SolidMaterialIcons name='keyboard-arrow-left' color={isFirst() ? 'grey' : 'black'} sizes={34} boxHeight={34} onPress={onDecrement} isDisabled={isFirst()} />

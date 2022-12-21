@@ -1,13 +1,13 @@
 import React from 'react'
-import { View as ViewDefault, Text as TextDefault } from 'react-native';
+import { View as ViewDefault, Text as TextDefault, TouchableOpacity } from 'react-native';
 import { View, Text } from '../../Themed';
 import Gap from '../../atoms/Gap/Gap';
 import ImageBackground from '../ImageBackground/ImageBackground';
 import { SolidMaterialIcons } from '../../atoms/Solid';
 
-function AnimeCard({ images, title, genres, aired, members, score }: { images: any, title: string, genres: [], aired: any, members: number, score: number }) {
+function AnimeCard({ mal_id, images, title, genres, aired, members, score, navigation }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, navigation: any }) {
     return (
-        <View style={{ width: 312, height: 257, marginHorizontal: 24, borderRadius: 5, elevation: 7, shadowOffset: { width: 0, height: 2 }, shadowColor: 'black', shadowOpacity: 1 }}>
+        <TouchableOpacity style={{ backgroundColor: 'white', width: 312, height: 257, marginHorizontal: 24, borderRadius: 5, elevation: 7, shadowOffset: { width: 0, height: 2 }, shadowColor: 'black', shadowOpacity: 1 }} onPress={() => navigation.navigate('AnimeDetailScreen', { mal_id })}>
             <ImageBackground key={200} size='l' source={{ uri: images.webp.large_image_url }} >
                 <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 10, paddingBottom: 10 }}>
                     <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -46,7 +46,7 @@ function AnimeCard({ images, title, genres, aired, members, score }: { images: a
                 </Text>
             </View>
 
-        </View>
+        </TouchableOpacity>
     )
 }
 

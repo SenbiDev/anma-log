@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 
-function TopAnimeList() {
-    const [topAnime, setTopAnime] = useState<{ images: any, title: string, type: string, episodes: number, aired: any, members: number, score: number }[]>();
+function TopAnimeList({navigation}: any) {
+    const [topAnime, setTopAnime] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, aired: any, members: number, score: number }[]>();
 
     useEffect(() => {
         async function fetchTopAnime() {
             const result = await fetch('https://api.jikan.moe/v4/top/anime?type=tv');
             const parseResult = await result.json();
-            const topAnimeList = await parseResult.data.map(({ images, title, type, episodes, aired, members, score }: { images: any, title: string, type: string, episodes: number, aired: any, members: number, score: number }) => ({ images, title, type, episodes, aired, members, score }));
+            const topAnimeList = await parseResult.data.map(({ mal_id, images, title, type, episodes, aired, members, score }: { mal_id: number, images: any, title: string, type: string, episodes: number, aired: any, members: number, score: number }) => ({ mal_id, images, title, type, episodes, aired, members, score }));
             // console.log('Top Anime List', JSON.stringify(topAnimeList, null, 4));
             setTopAnime(topAnimeList);
         }
@@ -20,11 +20,11 @@ function TopAnimeList() {
 
     return (
         <>
-            {topAnime?.map(({ images, title, type, episodes, aired, members, score }, index) => (
-                <View  key={index}>
+            {topAnime?.map(({ mal_id, images, title, type, episodes, aired, members, score }, index) => (
+                <TouchableOpacity key={index} onPress={() => navigation.navigate('AnimeDetailScreen', { mal_id })}>
                     <TopAnime images={images} title={title} type={type} episodes={episodes} aired={aired} members={members} score={score} />
                     <Gap height={15} />
-                </View>
+                </TouchableOpacity>
             ))}
         </>
     )
