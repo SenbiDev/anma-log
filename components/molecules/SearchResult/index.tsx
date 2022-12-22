@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 
-function SearchResult({ types, letter, navigation }: { types: string, letter: string, navigation: any }) {
+function SearchResult({ types, letter, navigation }: { types: 'anime' | 'manga' | string, letter: string, navigation: any }) {
     const [searchlist, setSearchList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
     
     useEffect(() => {
@@ -19,18 +19,18 @@ function SearchResult({ types, letter, navigation }: { types: string, letter: st
                 alert('Koneksi Jaringan Lambat')
             }
         }
-
-        fetchSearchList();
+        setTimeout(() => fetchSearchList(), 500)
+        
     }, [types, letter])
 
 
     return (
         <ScrollView>
-            {searchlist?.map(({  mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
-                <TouchableOpacity key={index} onPress={() => navigation.navigate( types === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })}>
-                    <TopAnime images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} />
+            {searchlist?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
+                <View key={index} >
+                    <TopAnime types={(types as 'anime' | 'manga')} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
-                </TouchableOpacity>
+                </View>
             ))}
         </ScrollView>
     )

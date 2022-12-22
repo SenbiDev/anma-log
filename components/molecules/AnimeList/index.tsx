@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 import { SolidMaterialIcons } from '../../atoms/Solid';
+import { useLightAppTheme } from '../../../themes';
 
 function AnimeList({ types, id, navigation }: { types: 'anime' | 'manga', id: number, navigation: any }) {
+    const lightTheme = useLightAppTheme()
     const [animeList, setAnimeList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
     const [text, setText] = useState('1');
     const [limitPage, setLimitPage] = useState(5);
@@ -70,15 +72,15 @@ function AnimeList({ types, id, navigation }: { types: 'anime' | 'manga', id: nu
     return (
         <View>
             {animeList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
-                <TouchableOpacity key={index} onPress={() => navigation.navigate( types === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })}>
-                    <TopAnime images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} />
+                <View key={index} >
+                    <TopAnime types={types} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
-                </TouchableOpacity>
+                </View>
             ))}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 24 }} >
-                <SolidMaterialIcons name='keyboard-arrow-left' color={isFirst() ? 'grey' : 'black'} sizes={34} boxHeight={34} onPress={onDecrement} isDisabled={isFirst()} />
-                <TextInput mode='outlined' style={{ alignSelf: 'flex-start', height: 28, padding: 0, marginTop: -3, textAlign: 'center', backgroundColor: 'transparent' }} value={text} onChangeText={onChangeText} />
-                <SolidMaterialIcons name='keyboard-arrow-right' color={isLimited() ? 'grey' : 'black'} sizes={34} boxHeight={34} onPress={onIncrement} isDisabled={isLimited()} />
+                <SolidMaterialIcons name='keyboard-arrow-left' color={isFirst() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor } sizes={34} boxHeight={34} onPress={onDecrement} isDisabled={isFirst()} />
+                <TextInput mode='outlined' textColor={lightTheme.textSolidPrimaryColor} outlineColor={lightTheme.textSolidPrimaryColor} style={{ alignSelf: 'flex-start', height: 28, padding: 0, marginTop: -3, textAlign: 'center', backgroundColor: 'transparent' }} value={text} onChangeText={onChangeText} />
+                <SolidMaterialIcons name='keyboard-arrow-right' color={isLimited() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor } sizes={34} boxHeight={34} onPress={onIncrement} isDisabled={isLimited()} />
             </View>
             <Gap height={25} />
         </View>

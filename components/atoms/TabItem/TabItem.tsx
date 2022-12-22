@@ -1,13 +1,14 @@
-import { Text } from '../../Themed';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { IconAnimeActive, IconAnime } from '../Icons/Anime';
 import { IconFavoritesActive, IconFavorites } from '../Icons/Favorites';
 import { IconMangaActive, IconManga } from '../Icons/Manga';
 import { IconSearchActive, IconSearch } from '../Icons/Search';
 import { IconSeasonalActive, IconSeasonal } from '../Icons/Seasonal';
 import { GradientText } from '../Gradient';
+import { useLightAppTheme } from '../../../themes';
 
 const TabItem = ({title, active, onPress, onLongPress}: any) => {
+  const lightTheme = useLightAppTheme()
   const Icon = () => {
     if (title === 'Anime') {
       return active ? <IconAnimeActive /> : <IconAnime />;
@@ -35,7 +36,7 @@ const TabItem = ({title, active, onPress, onLongPress}: any) => {
       { 
         active
         ? <GradientText style={styles.text} >{title}</GradientText>
-        : <Text style={styles.text} >{title}</Text>
+        : <Text style={[styles.text, { color: lightTheme.textSolidPrimaryColor }]} >{title}</Text>
       }
     </TouchableOpacity>
   );

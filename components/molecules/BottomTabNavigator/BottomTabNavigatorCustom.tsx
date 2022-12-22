@@ -3,10 +3,12 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import { View } from "../../Themed";
 import TabItem from "../../atoms/TabItem/TabItem";
+import { useLightAppTheme } from '../../../themes';
 
 const BottomTabNavigatorCustom = ({state, descriptors, navigation}: BottomTabBarProps) => {
+  const lightTheme = useLightAppTheme();
     return (
-      <View style={styles.container} >
+      <View style={[styles.container, { backgroundColor: lightTheme.bottomTabBackgroundColor }]} >
         {state.routes.map((route: any, index: number) => {
           const {options} = descriptors[route.key];
           const label =
@@ -59,7 +61,6 @@ const BottomTabNavigatorCustom = ({state, descriptors, navigation}: BottomTabBar
       justifyContent: 'space-between',
       paddingHorizontal: 24,
       paddingVertical: 13,
-      height: 67
-      // backgroundColor: colors.secondary,
+      height: 67,
     },
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import TopAnime from '../TopAnime';
 import Gap from '../../atoms/Gap/Gap';
 
@@ -25,10 +25,10 @@ function TopMangaList({navigation}: any) {
     return (
         <>
             {topManga?.map(({  mal_id, images, title, type, volumes, published, members, score }, index) => (
-                <TouchableOpacity key={index} onPress={() => navigation.navigate('MangaDetailScreen', { mal_id })}>
-                    <TopAnime images={images} title={title} type={type} volumes={volumes} published={published} members={members} score={score} />
+                <View key={index}>
+                    <TopAnime types='manga' mal_id={mal_id} images={images} title={title} type={type} volumes={volumes} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
-                </TouchableOpacity>
+                </View>
             ))}
         </>
     )

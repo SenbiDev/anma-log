@@ -46,6 +46,7 @@ import TopThreeManga from '../components/molecules/TopThreeManga';
 import TopMangaList from '../components/molecules/TopMangaList';
 import SearchResult from '../components/molecules/SearchResult';
 import { getAnime, getManga, storeAnime, storeManga } from '../utils/storage';
+import { useLightAppTheme } from '../themes';
 
 
 function AnimeScreen({ navigation }: any) {
@@ -126,6 +127,10 @@ function SearchScreen({ navigation }: any) {
     setText(text);
   }
 
+  const onClearText = () => {
+    setText('');
+  }
+
   return (
     <View style={styles.container}>
       <Gap height={24} />
@@ -136,24 +141,13 @@ function SearchScreen({ navigation }: any) {
           title={title}
           text={text}
           onChangeText={onChangeText}
+          onClearText={onClearText}
         />
       </View>
       <Gap height={30} />
       {/* <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Result</GradientText>
       <Gap height={20} /> */}
       <SearchResult types={title.toLowerCase()} letter={text} navigation={navigation} />
-    </View>
-  )
-}
-
-function FavoritesScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>
-        Favorites Screen
-      </Text>
-      <GradientMaterialIcons size={20} style={{ height: 24 }} name='favorite' />
-      <GradientText style={{ fontSize: 10 }} >Favorites</GradientText>
     </View>
   )
 }
@@ -185,6 +179,7 @@ function TopMangaListScreen({ navigation }: any) {
 
 function AnimeDetailScreen({ route }: any) {
   const { mal_id } = route.params
+  const lightTheme = useLightAppTheme();
   const [animeDetail, setAnimeDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, season: string, year: number, status: string, episodes: number, duration: string, synopsis: string, title_english: string, source: string, studioList: string[], aired: any, rating: string, licensorList: string[] }>();
   const [isFavorited, setIsFavorited] = useState(false);
   const [toggle, setToggle] = useState(true);
@@ -238,14 +233,14 @@ function AnimeDetailScreen({ route }: any) {
     <ScrollView style={{ padding: 24 }}>
       <ViewDefault style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <ViewDefault>
-          <Text style={{ width: 235, fontSize: 16 }} >{animeDetail?.title}</Text>
+          <Text style={{ width: 235, fontSize: 16, color: lightTheme.textSolidPrimaryColor }} >{animeDetail?.title}</Text>
           <Gap height={5} />
-          <Text style={{ fontSize: 12 }}>{animeDetail?.genreList.join(', ')}</Text>
+          <Text style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.genreList.join(', ')}</Text>
           <Gap height={5} />
           <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
             <Gap width={6} />
-            <TextDefault style={{ color: 'black', fontSize: 12, height: 20 }}>
+            <TextDefault style={{ color: lightTheme.textSolidPrimaryColor, fontSize: 12, height: 20 }}>
               {animeDetail?.score ?? 'Unknown'}
             </TextDefault>
           </ViewDefault>
@@ -259,51 +254,51 @@ function AnimeDetailScreen({ route }: any) {
       <Gap height={30} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <ViewDefault style={{ alignItems: 'center' }} >
-          <TextDefault style={{ fontSize: 12 }}>Rank</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>#{animeDetail?.rank ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Rank</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>#{animeDetail?.rank ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Popularity</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>#{animeDetail?.popularity ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Popularity</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>#{animeDetail?.popularity ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Members</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{animeDetail?.members ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Members</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.members ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Favorites</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{animeDetail?.favorites ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Favorites</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.favorites ?? 'Unknown'}</TextDefault>
         </ViewDefault>
       </ViewDefault>
       <Gap height={30} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <ViewDefault style={{ alignItems: 'center' }} >
-          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.type ?? 'Unknown'},`}</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${animeDetail?.type ?? 'Unknown'},`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
         </ViewDefault>
-        <TextDefault style={{ fontSize: 12 }}>{animeDetail?.status}</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.status}</TextDefault>
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.episodes ?? 'Unknown'} ep,`}</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.duration.replace(' per ep', '')}`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${animeDetail?.episodes ?? 'Unknown'} ep,`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${animeDetail?.duration.replace(' per ep', '')}`}</TextDefault>
         </ViewDefault>
       </ViewDefault>
       <Gap height={40} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <TextDefault style={{ fontSize: 14, fontWeight: '500' }}>Synopsis</TextDefault>
+        <TextDefault style={{ fontSize: 14, fontWeight: '500', color: lightTheme.textSolidPrimaryColor }}>Synopsis</TextDefault>
       </ViewDefault>
       <Gap height={13} />
-      <TextDefault style={{ fontSize: 12 }} numberOfLines={toggle ? 5 : 0}>{animeDetail?.synopsis ?? 'Unknown'}</TextDefault>
+      <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }} numberOfLines={toggle ? 5 : 0}>{animeDetail?.synopsis ?? 'Unknown'}</TextDefault>
       <Gap height={10} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color='black' sizes={20} boxHeight={24} onPress={onTogglePress} />
+        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color={lightTheme.iconSolidPrimaryColor} sizes={20} boxHeight={24} onPress={onTogglePress} />
       </ViewDefault>
       <Gap height={40} />
       <ViewDefault>
-        <TextDefault style={{ fontSize: 12 }}>English</TextDefault>
-        <TextDefault style={{ fontSize: 12 }}>{animeDetail?.title_english ?? 'Unknown'}</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>English</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.title_english ?? 'Unknown'}</TextDefault>
       </ViewDefault>
       <Gap height={20} />
 
@@ -311,35 +306,35 @@ function AnimeDetailScreen({ route }: any) {
 
         <ViewDefault>
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Source</TextDefault>
-            <TextDefault style={{ fontSize: 12 }}>{animeDetail?.source ?? 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Source</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{animeDetail?.source ?? 'Unknown'}</TextDefault>
           </ViewDefault>
           <Gap height={20} />
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Studio</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{animeDetail?.studioList.join(', ') !== '' ? animeDetail?.studioList.join(', ') : 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Studio</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 87 }} numberOfLines={3}>{animeDetail?.studioList.join(', ') !== '' ? animeDetail?.studioList.join(', ') : 'Unknown'}</TextDefault>
           </ViewDefault>
           <Gap height={20} />
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Rating</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 43 }} numberOfLines={4} >{animeDetail?.rating ?? 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Rating</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 43 }} numberOfLines={4} >{animeDetail?.rating ?? 'Unknown'}</TextDefault>
           </ViewDefault>
         </ViewDefault>
         <Gap width={80} />
         <ViewDefault>
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Season</TextDefault>
-            <TextDefault style={{ fontSize: 12 }}>{`${animeDetail?.season?.toUpperCase() ?? 'Unknown'} ${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Season</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${animeDetail?.season?.toUpperCase() ?? 'Unknown'} ${animeDetail?.year ?? 'Unknown'}`}</TextDefault>
           </ViewDefault>
           <Gap height={20} />
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Aired</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{animeDetail?.aired.string ?? 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Aired</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 87 }} numberOfLines={3}>{animeDetail?.aired.string ?? 'Unknown'}</TextDefault>
           </ViewDefault>
           <Gap height={20} />
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Licensor</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 127 }} numberOfLines={4}>{animeDetail?.licensorList.join(', ') !== '' ? animeDetail?.licensorList.join(', ') : 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Licensor</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 127 }} numberOfLines={4}>{animeDetail?.licensorList.join(', ') !== '' ? animeDetail?.licensorList.join(', ') : 'Unknown'}</TextDefault>
           </ViewDefault>
         </ViewDefault>
 
@@ -351,6 +346,7 @@ function AnimeDetailScreen({ route }: any) {
 
 function MangaDetailScreen({ route }: any) {
   const { mal_id } = route.params
+  const lightTheme = useLightAppTheme();
   const [mangaDetail, setMangaDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, status: string, volumes: number, chapters: number, synopsis: string, title_english: string, published: any, authorList: string[], serializationList: string[] }>();
   const [isFavorited, setIsFavorited] = useState(false);
   const [toggle, setToggle] = useState(true);
@@ -404,14 +400,14 @@ function MangaDetailScreen({ route }: any) {
     <ScrollView style={{ padding: 24 }}>
       <ViewDefault style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <ViewDefault>
-          <Text style={{ width: 235, fontSize: 16 }} >{mangaDetail?.title}</Text>
+          <Text style={{ width: 235, fontSize: 16, color: lightTheme.textSolidPrimaryColor }} >{mangaDetail?.title}</Text>
           <Gap height={5} />
-          <Text style={{ fontSize: 12, width: 235 }}>{mangaDetail?.genreList.join(', ')}</Text>
+          <Text style={{ fontSize: 12, width: 235, color: lightTheme.textSolidPrimaryColor }}>{mangaDetail?.genreList.join(', ')}</Text>
           <Gap height={5} />
           <ViewDefault style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
             <Gap width={6} />
-            <TextDefault style={{ color: 'black', fontSize: 12, height: 20 }}>
+            <TextDefault style={{ color: lightTheme.textSolidPrimaryColor, fontSize: 12, height: 20 }}>
               {mangaDetail?.score ?? 'Unknown'}
             </TextDefault>
           </ViewDefault>
@@ -425,50 +421,50 @@ function MangaDetailScreen({ route }: any) {
       <Gap height={30} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <ViewDefault style={{ alignItems: 'center' }} >
-          <TextDefault style={{ fontSize: 12 }}>Rank</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>#{mangaDetail?.rank ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Rank</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>#{mangaDetail?.rank ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Popularity</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>#{mangaDetail?.popularity ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Popularity</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>#{mangaDetail?.popularity ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Members</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.members ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Members</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{mangaDetail?.members ?? 'Unknown'}</TextDefault>
         </ViewDefault>
 
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>Favorites</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.favorites ?? 'Unknown'}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Favorites</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{mangaDetail?.favorites ?? 'Unknown'}</TextDefault>
         </ViewDefault>
       </ViewDefault>
       <Gap height={30} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <ViewDefault style={{ alignItems: 'center' }} >
-          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.type ?? 'Unknown'}`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${mangaDetail?.type ?? 'Unknown'}`}</TextDefault>
         </ViewDefault>
-        <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.status}</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{mangaDetail?.status}</TextDefault>
         <ViewDefault style={{ alignItems: 'center' }}>
-          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.volumes ?? 'Unknown'} vol,`}</TextDefault>
-          <TextDefault style={{ fontSize: 12 }}>{`${mangaDetail?.chapters ?? 'Unknown'} chp`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${mangaDetail?.volumes ?? 'Unknown'} vol,`}</TextDefault>
+          <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{`${mangaDetail?.chapters ?? 'Unknown'} chp`}</TextDefault>
         </ViewDefault>
       </ViewDefault>
       <Gap height={40} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <TextDefault style={{ fontSize: 14, fontWeight: '500' }}>Synopsis</TextDefault>
+        <TextDefault style={{ fontSize: 14, fontWeight: '500', color: lightTheme.textSolidPrimaryColor }}>Synopsis</TextDefault>
       </ViewDefault>
       <Gap height={13} />
-      <TextDefault style={{ fontSize: 12 }} numberOfLines={toggle ? 5 : 0}>{mangaDetail?.synopsis ?? 'Unknown'}</TextDefault>
+      <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }} numberOfLines={toggle ? 5 : 0}>{mangaDetail?.synopsis ?? 'Unknown'}</TextDefault>
       <Gap height={10} />
       <ViewDefault style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color='black' sizes={20} boxHeight={24} onPress={onTogglePress} />
+        <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color={lightTheme.iconSolidPrimaryColor} sizes={20} boxHeight={24} onPress={onTogglePress} />
       </ViewDefault>
       <Gap height={40} />
       <ViewDefault>
-        <TextDefault style={{ fontSize: 12 }}>English</TextDefault>
-        <TextDefault style={{ fontSize: 12 }}>{mangaDetail?.title_english ?? 'Unknown'}</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>English</TextDefault>
+        <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>{mangaDetail?.title_english ?? 'Unknown'}</TextDefault>
       </ViewDefault>
       <Gap height={20} />
 
@@ -476,13 +472,13 @@ function MangaDetailScreen({ route }: any) {
 
         <ViewDefault>
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Published</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{mangaDetail?.published.string ?? 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Published</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 87 }} numberOfLines={3}>{mangaDetail?.published.string ?? 'Unknown'}</TextDefault>
           </ViewDefault>
           <Gap height={20} />
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Serialization</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 87 }} numberOfLines={3}>{mangaDetail?.serializationList.join(', ') !== '' ? mangaDetail?.serializationList.join(', ') : 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Serialization</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 87 }} numberOfLines={3}>{mangaDetail?.serializationList.join(', ') !== '' ? mangaDetail?.serializationList.join(', ') : 'Unknown'}</TextDefault>
           </ViewDefault>
         </ViewDefault>
 
@@ -490,8 +486,8 @@ function MangaDetailScreen({ route }: any) {
 
         <ViewDefault>
           <ViewDefault>
-            <TextDefault style={{ fontSize: 12 }}>Authors</TextDefault>
-            <TextDefault style={{ fontSize: 12, width: 127 }} numberOfLines={4}>{mangaDetail?.authorList.join(', ') !== '' ? mangaDetail?.authorList.join(', ') : 'Unknown'}</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor }}>Authors</TextDefault>
+            <TextDefault style={{ fontSize: 12, color: lightTheme.textSolidPrimaryColor, width: 127 }} numberOfLines={4}>{mangaDetail?.authorList.join(', ') !== '' ? mangaDetail?.authorList.join(', ') : 'Unknown'}</TextDefault>
           </ViewDefault>
         </ViewDefault>
 
@@ -720,7 +716,7 @@ function AnimeFavoritesListScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList type='anime' seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={animeFavoriteList} seasonal={'Anime Favorite List'} navigation={navigation} />
     </View>
   )
 }
@@ -748,16 +744,16 @@ function MangaFavoritesListScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList type='manga' seasonalList={mangaFavoriteList} seasonal={''} navigation={navigation} />
+      <AnimeCardList type='manga' seasonalList={mangaFavoriteList} seasonal={'Manga Favorite List'} navigation={navigation} />
     </View>
   )
 }
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation({ colorScheme }: { colorScheme: any }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -771,6 +767,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
+    //  initialRouteName='NotFound'
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="AnimeListScreen" component={AnimeListScreen} options={{ headerTitle: 'Anime List', headerTitleAlign: 'center' }} />
@@ -799,10 +796,11 @@ function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Anime"
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}
+      // screenOptions={{
+      //   tabBarActiveTintColor: Colors[colorScheme].tint,
+      // }}
       tabBar={(props: BottomTabBarProps) => <BottomTabNavigatorCustom {...props} />}
+      
     >
       <BottomTab.Screen
         name="Anime"
@@ -834,8 +832,9 @@ function BottomTabNavigator() {
 }
 
 function CustomTab({ state, descriptors, navigation }: MaterialTopTabBarProps) {
+  const lightTheme = useLightAppTheme()
   return (
-    <View style={{ flexDirection: 'row', paddingTop: 15, elevation: 7, shadowOffset: { width: 0, height: 3 }, shadowColor: 'black', shadowOpacity: 1 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: lightTheme.topTabBackgroundColor, paddingTop: 15, elevation: 7, shadowOffset: { width: 0, height: 3 }, shadowColor: 'black', shadowOpacity: 1 }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -867,7 +866,7 @@ function CustomTab({ state, descriptors, navigation }: MaterialTopTabBarProps) {
         };
 
         return (
-          <View key={index} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', marginTop: StatusBar.currentHeight || 0 }} >
+          <View key={index} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', backgroundColor: lightTheme.topTabBackgroundColor, marginTop: StatusBar.currentHeight || 0 }} >
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
@@ -877,7 +876,7 @@ function CustomTab({ state, descriptors, navigation }: MaterialTopTabBarProps) {
               onLongPress={onLongPress}
               style={{ width: '100%' }}>
               {isFocused ? <GradientText style={{ paddingBottom: 12, textAlign: 'center' }} >{(label as string)}</GradientText> :
-                <TextDefault style={{ paddingBottom: 12, textAlign: 'center' }} >{(label as string)}</TextDefault>}
+                <TextDefault style={{ paddingBottom: 12, textAlign: 'center', color: lightTheme.textSolidPrimaryColor }} >{(label as string)}</TextDefault>}
               <LinearGradient
                 // Background Linear Gradient
                 start={{ x: 0.3, y: 0.1 }}
@@ -905,7 +904,7 @@ function SeasonalTopTabNavigator() {
     <SeasonalTopTab.Navigator
       initialRouteName='Now'
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        // tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarStyle: {
           marginTop: StatusBar.currentHeight || 0,
         }
@@ -963,12 +962,6 @@ function FavoritesTopTabNavigator() {
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof MaterialIcons>['name'];
-  color: string;
-}) {
-  return <MaterialIcons size={30} style={{ marginBottom: -3 }} {...props} />;
-}
 
 const styles = StyleSheet.create({
   container: {

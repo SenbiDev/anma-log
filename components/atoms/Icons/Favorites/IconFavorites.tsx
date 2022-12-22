@@ -1,9 +1,11 @@
 import React from 'react'
 import { SolidMaterialIcons } from '../../Solid'
+import { useLightAppTheme } from '../../../../themes'
 
 function IconFavorites() {
+  const lightTheme = useLightAppTheme();
   return (
-    <SolidMaterialIcons name='favorite' color='black' sizes={20} boxHeight={24} />
+    <SolidMaterialIcons name='favorite' color={lightTheme.iconSolidPrimaryColor} sizes={20} boxHeight={24} />
   )
 }
 
