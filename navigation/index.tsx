@@ -548,7 +548,7 @@ function SeasonalListScreen({ route, navigation }: any) {
   return (
     <View style={{ flex: 1 }} >
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={`${season.toUpperCase()} ${year}`} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={seasonalList} seasonal={`${season.toUpperCase()} ${year}`} navigation={navigation} />
     </View>
   )
 }
@@ -604,7 +604,7 @@ function LastSeasonalScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
@@ -648,7 +648,7 @@ function NowSeasonalScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
@@ -692,7 +692,7 @@ function UpComingSeasonalScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={seasonalList} seasonal={seasonal} navigation={navigation} />
     </View>
   )
 }
@@ -720,35 +720,35 @@ function AnimeFavoritesListScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      <AnimeCardList seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} />
+      <AnimeCardList type='anime' seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} />
     </View>
   )
 }
 
 function MangaFavoritesListScreen({ navigation }: any) {
-  const [animeFavoriteList, setAnimeFavoriteList] = useState<{ mal_id: number, images: any, title: string, genreList: string[], published: any, members: number, score: number }[]>([]);
+  const [mangaFavoriteList, setMangaFavoriteList] = useState<{ mal_id: number, images: any, title: string, genreList: string[], published: any, members: number, score: number }[]>([]);
   console.log('check inifinite loop')
 
   useFocusEffect(() => {
-    let getAnimeFavoriteList: any = async () => {
+    let getMangaFavoriteList: any = async () => {
       try {
-        const getAnimeFavorites = await getManga();
-        setAnimeFavoriteList(getAnimeFavorites)
+        const getMangaFavorites = await getManga();
+        setMangaFavoriteList(getMangaFavorites)
       } catch {
         alert('Koneksi Jaringan Lambat')
       }
     }
-    getAnimeFavoriteList()
+    getMangaFavoriteList()
 
     return () => {
-      getAnimeFavoriteList = null;
+      getMangaFavoriteList = null;
     }
   });
 
   return (
     <View style={{ flex: 1 }}>
       <Gap height={30} />
-      {/* <AnimeCardList seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} /> */}
+      <AnimeCardList type='manga' seasonalList={mangaFavoriteList} seasonal={''} navigation={navigation} />
     </View>
   )
 }
