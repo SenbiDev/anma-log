@@ -4,10 +4,11 @@
  *
  */
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ColorSchemeName, Pressable, StyleSheet, View as ViewDefault, StatusBar, Image, ImageBackground as ImgB, ScrollView, Text as TextDefault, TouchableOpacity } from 'react-native';
 import ImageBackground from '../components/molecules/ImageBackground/ImageBackground';
 import Colors from '../constants/Colors';
@@ -44,6 +45,7 @@ import AnimeList from '../components/molecules/AnimeList';
 import TopThreeManga from '../components/molecules/TopThreeManga';
 import TopMangaList from '../components/molecules/TopMangaList';
 import SearchResult from '../components/molecules/SearchResult';
+import { getAnime, getManga, storeAnime, storeManga } from '../utils/storage';
 
 
 function AnimeScreen({ navigation }: any) {
@@ -187,8 +189,17 @@ function AnimeDetailScreen({ route }: any) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [toggle, setToggle] = useState(true);
 
-  const onFavoritePress = () => {
+  const onFavoritePress = async ({ mal_id, images, title, genreList, aired, members, score }: { mal_id: number, images: any, title?: string, genreList?: string[], aired: any, members?: number, score?: number }) => {
     setIsFavorited(!isFavorited);
+    const value = { mal_id, images, title, genreList, aired, members, score };
+    const data = await getAnime();
+    console.log('STORAGE', JSON.stringify(data, null, 4));
+    if (isFavorited) {
+      const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
+      storeAnime(valueAfterDelete);
+    } else {
+      storeAnime([...data, value]);
+    }
   };
 
   const onTogglePress = () => {
@@ -208,7 +219,13 @@ function AnimeDetailScreen({ route }: any) {
         // console.log('ANIME DETAIL', JSON.stringify(parseResult?.data, null, 4));
 
         setAnimeDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, season, year, status, episodes, duration, synopsis, title_english, source, studioList, aired, rating, licensorList });
-
+        const getAnimeFavoriteList = await getAnime();
+        const getList = getAnimeFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
+        const isExist = getList[0]?.mal_id ? true : false;
+        console.log('getAnimeFavoriteList: ', JSON.stringify(getAnimeFavoriteList, null, 3));
+        console.log('getList: ', JSON.stringify(getList, null, 3));
+        console.log('is EXIST: ', isExist);
+        setIsFavorited(isExist);
       } catch {
         alert('Koneksi Jaringan Lambat')
       }
@@ -233,7 +250,7 @@ function AnimeDetailScreen({ route }: any) {
             </TextDefault>
           </ViewDefault>
         </ViewDefault>
-        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={onFavoritePress} />
+        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={() => onFavoritePress({ mal_id, images: animeDetail?.images, title: animeDetail?.title, genreList: animeDetail?.genreList, aired: animeDetail?.aired, members: animeDetail?.members, score: animeDetail?.score })} />
       </ViewDefault>
       <Gap height={30} />
       <ViewDefault style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -338,8 +355,17 @@ function MangaDetailScreen({ route }: any) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [toggle, setToggle] = useState(true);
 
-  const onFavoritePress = () => {
+  const onFavoritePress = async ({ mal_id, images, title, genreList, published, members, score }: { mal_id: number, images: any, title?: string, genreList?: string[], published: any, members?: number, score?: number }) => {
     setIsFavorited(!isFavorited);
+    const value = { mal_id, images, title, genreList, published, members, score };
+    const data = await getManga();
+    console.log('STORAGE', JSON.stringify(data, null, 4));
+    if (isFavorited) {
+      const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
+      storeManga(valueAfterDelete);
+    } else {
+      storeManga([...data, value]);
+    }
   };
 
   const onTogglePress = () => {
@@ -359,7 +385,13 @@ function MangaDetailScreen({ route }: any) {
         // console.log('MANGA DETAIL', JSON.stringify(parseResult?.data, null, 4));
 
         setMangaDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, status, volumes, chapters, synopsis, title_english, published, authorList, serializationList });
-
+        const getMangaFavoriteList = await getManga();
+        const getList = getMangaFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
+        const isExist = getList[0]?.mal_id ? true : false;
+        console.log('getMangaFavoriteList: ', JSON.stringify(getMangaFavoriteList, null, 3));
+        console.log('getList: ', JSON.stringify(getList, null, 3));
+        console.log('is EXIST: ', isExist);
+        setIsFavorited(isExist);
       } catch {
         alert('Koneksi Jaringan Lambat')
       }
@@ -384,7 +416,7 @@ function MangaDetailScreen({ route }: any) {
             </TextDefault>
           </ViewDefault>
         </ViewDefault>
-        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={onFavoritePress} />
+        <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={() => onFavoritePress({ mal_id, images: mangaDetail?.images, title: mangaDetail?.title, genreList: mangaDetail?.genreList, published: mangaDetail?.published, members: mangaDetail?.members, score: mangaDetail?.score })} />
       </ViewDefault>
       <Gap height={30} />
       <ViewDefault style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -665,18 +697,58 @@ function UpComingSeasonalScreen({ navigation }: any) {
   )
 }
 
-function AnimeFavoritesListScreen() {
+function AnimeFavoritesListScreen({ navigation }: any) {
+  const [animeFavoriteList, setAnimeFavoriteList] = useState<{ mal_id: number, images: any, title: string, genreList: string[], aired: any, members: number, score: number }[]>([]);
+  console.log('check inifinite loop')
+
+  useFocusEffect(() => {
+    let getAnimeFavoriteList: any = async () => {
+      try {
+        const getAnimeFavorites = await getAnime();
+        setAnimeFavoriteList(getAnimeFavorites)
+      } catch {
+        alert('Koneksi Jaringan Lambat')
+      }
+    }
+    getAnimeFavoriteList()
+
+    return () => {
+      getAnimeFavoriteList = null;
+    }
+  });
+
   return (
     <View style={{ flex: 1 }}>
-
+      <Gap height={30} />
+      <AnimeCardList seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} />
     </View>
   )
 }
 
-function MangaFavoritesListScreen() {
+function MangaFavoritesListScreen({ navigation }: any) {
+  const [animeFavoriteList, setAnimeFavoriteList] = useState<{ mal_id: number, images: any, title: string, genreList: string[], published: any, members: number, score: number }[]>([]);
+  console.log('check inifinite loop')
+
+  useFocusEffect(() => {
+    let getAnimeFavoriteList: any = async () => {
+      try {
+        const getAnimeFavorites = await getManga();
+        setAnimeFavoriteList(getAnimeFavorites)
+      } catch {
+        alert('Koneksi Jaringan Lambat')
+      }
+    }
+    getAnimeFavoriteList()
+
+    return () => {
+      getAnimeFavoriteList = null;
+    }
+  });
+
   return (
     <View style={{ flex: 1 }}>
-      <GradientText style={{ fontSize: 10 }} >MangaFavoritesListScreen</GradientText>
+      <Gap height={30} />
+      {/* <AnimeCardList seasonalList={animeFavoriteList} seasonal={''} navigation={navigation} /> */}
     </View>
   )
 }

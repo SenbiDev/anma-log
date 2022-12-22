@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity }  from 'react-native';
 import AnimeCard from './AnimeCard';
 import Gap from '../../atoms/Gap/Gap';
 
-function AnimeCardList({ seasonalList, seasonal, navigation }: { seasonalList: { mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[], seasonal: string, navigation: any }) {
+function AnimeCardList({ seasonalList, seasonal, navigation }: { seasonalList: { mal_id: number, images: any, title: string, genreList: string[], aired: any, members: number, score: number, season?: string, year?: number }[], seasonal: string, navigation: any }) {
   // console.log('SADFASDFX:', JSON.stringify(seasonalList, null, 3))
   return (
     <View>

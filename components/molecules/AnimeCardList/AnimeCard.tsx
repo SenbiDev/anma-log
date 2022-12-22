@@ -5,7 +5,7 @@ import Gap from '../../atoms/Gap/Gap';
 import ImageBackground from '../ImageBackground/ImageBackground';
 import { SolidMaterialIcons } from '../../atoms/Solid';
 
-function AnimeCard({ mal_id, images, title, genres, aired, members, score, navigation }: { mal_id: number, images: any, title: string, genres: [], aired: any, members: number, score: number, navigation: any }) {
+function AnimeCard({ mal_id, images, title, genres, aired, members, score, navigation }: { mal_id: number, images: any, title: string, genres: string[], aired: any, members: number, score: number, navigation: any }) {
     return (
         <TouchableOpacity style={{ backgroundColor: 'white', width: 312, height: 257, marginHorizontal: 24, borderRadius: 5, elevation: 7, shadowOffset: { width: 0, height: 2 }, shadowColor: 'black', shadowOpacity: 1 }} onPress={() => navigation.navigate('AnimeDetailScreen', { mal_id })}>
             <ImageBackground key={200} size='l' source={{ uri: images.webp.large_image_url }} >
