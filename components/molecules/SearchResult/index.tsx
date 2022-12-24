@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView } from 'react-native';
-import TopAnime from '../TopAnime';
-import Gap from '../../atoms/Gap/Gap';
+import Item from '../Item';
+import Gap from '../../atoms/Gap';
 
 function SearchResult({ types, letter, navigation }: { types: 'anime' | 'manga' | string, letter: string, navigation: any }) {
     const [searchlist, setSearchList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
@@ -28,7 +28,7 @@ function SearchResult({ types, letter, navigation }: { types: 'anime' | 'manga' 
         <ScrollView>
             {searchlist?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
                 <View key={index} >
-                    <TopAnime types={(types as 'anime' | 'manga')} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
+                    <Item types={(types as 'anime' | 'manga')} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
                 </View>
             ))}

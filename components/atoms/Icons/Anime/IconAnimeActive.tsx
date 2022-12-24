@@ -1,5 +1,5 @@
 import React from 'react'
-import { GradientMaterialIcons } from '../../Gradient'
+import GradientMaterialIcons from '../../Gradient/GradientMaterialIcons';
 
 function IconAnimeActive() {
   return (

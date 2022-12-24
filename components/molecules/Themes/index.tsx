@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text as TextDefault, ScrollView } from 'react-native'
-import { GradientBackground } from '../../atoms/Gradient'
-import Gap from '../../atoms/Gap/Gap'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { GradientBackground, Gap } from '../../atoms';
 
 function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
-    const [themes, setThemes] = useState<[[{ name: string; mal_id: string; }, { name: string; mal_id: string; }]]>();
+    const [themeList, setThemeList] = useState<[[{ name: string; mal_id: string; }, { name: string; mal_id: string; }]]>();
 
     useEffect(() => {
         async function fetchThemes() {
@@ -30,10 +29,10 @@ function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
                     [6,7]
                 */
                 const mapResult = filterResult.map(({ name, mal_id }: { name: string, mal_id: string }) => ({ name, mal_id }));
-                const themeList = mapResult.map(() => ([mapResult[first += 2], mapResult[second += 2]]));
-                const deleteUndefined = themeList.filter((matrix: [{ name: string; mal_id: string; }, { name: string; mal_id: string; }]) => matrix[0] !== undefined && matrix[1] !== undefined);
+                const list = mapResult.map(() => ([mapResult[first += 2], mapResult[second += 2]]));
+                const listWithoutUndefined = list.filter((matrix: [{ name: string; mal_id: string; }, { name: string; mal_id: string; }]) => matrix[0] !== undefined && matrix[1] !== undefined);
     
-                setThemes(() => deleteUndefined);
+                setThemeList(() => listWithoutUndefined);
             } catch {
                 alert('Koneksi Jaringan Lambat')
             }
@@ -45,20 +44,20 @@ function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
     }, []);
 
     return (
-        <ScrollView style={{ marginLeft: 24 }} horizontal showsHorizontalScrollIndicator={false}>
-            {themes?.map((theme, index) => (
-                <View key={index} style={{ flexDirection: 'row' }}>
+        <ScrollView style={styles.scroll} horizontal showsHorizontalScrollIndicator={false}>
+            {themeList?.map((theme, index) => (
+                <View key={index} style={styles.buttonsColumn}>
                     <View>
-                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('AnimeListScreen', { type, mal_id: theme[0].mal_id })} >
-                            <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[0].mal_id })} >
+                            <Text style={styles.text}>
                                 {theme[0].name}
-                            </TextDefault>
+                            </Text>
                         </GradientBackground>
                         <Gap height={10} />
-                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('AnimeListScreen', { type, mal_id: theme[1].mal_id })} >
-                            <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[1].mal_id })} >
+                            <Text style={styles.text}>
                                 {theme[1].name}
-                            </TextDefault>
+                            </Text>
                         </GradientBackground>
                     </View>
                     <Gap width={10} />
@@ -68,5 +67,19 @@ function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    scroll: {
+        marginLeft: 24,
+    },
+    buttonsColumn : {
+        flexDirection: 'row',
+    },
+    text: {
+        color: 'white',
+        fontSize: 10,
+        fontWeight: '600',
+    },
+})
 
 export default Themes

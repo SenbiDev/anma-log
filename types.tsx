@@ -15,9 +15,8 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootBottomTabParamList> | undefined;
-  AnimeListScreen: undefined;
-  TopAnimeListScreen: undefined;
-  TopMangaListScreen: undefined;
+  ListScreen: undefined;
+  TopListScreen: undefined;
   SeasonalListScreen: undefined;
   AnimeDetailScreen: undefined;
   MangaDetailScreen: undefined;

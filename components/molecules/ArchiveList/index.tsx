@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View as ViewDefault, Text as TextDefault, ScrollView } from 'react-native';
-import { GradientBackground } from '../../atoms/Gradient';
-import Gap from '../../atoms/Gap/Gap';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { GradientBackground, Gap } from '../../atoms';
 
 function ArchiveList({navigation}: any) {
     const [archives, setArchives] = useState<{ year: number, seasons:  | ["winter"] | ["winter", "spring"] | ["winter", "spring", "summer"] | ["winter", "spring", "summer", "fall"] }[]>([]);
@@ -29,73 +28,82 @@ function ArchiveList({navigation}: any) {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             {archives?.map(({ year, seasons }, index) => (
-                <ViewDefault key={index} style={{ marginHorizontal: 24 }}>
-                    <ViewDefault style={{ flexDirection: 'row' }}>
+                <View key={index} style={styles.container}>
+                    <View style={styles.butonsRow}>
                         {seasons[0] &&
                         <GradientBackground paddingHorizontal={15} paddingVertical={5} width={69} height={40} onPress={() => navigation.navigate('SeasonalListScreen', { year, season: seasons[0] })}>
-                            <ViewDefault style={{ alignItems: 'center' }}>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                            <View style={styles.column}>
+                                <Text style={styles.text}>
                                     {year}
-                                    {/* data[0].year atau year */}
-                                </TextDefault>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
-                                    {/* Winter */}
+                                </Text>
+                                <Text style={styles.text}>
                                     {seasons[0]}
-                                </TextDefault>
-                            </ViewDefault>
+                                </Text>
+                            </View>
                         </GradientBackground>
                         }
                         <Gap width={12} />
                         {seasons[1] &&
                         <GradientBackground paddingHorizontal={15} paddingVertical={5} width={69} height={40} onPress={() => navigation.navigate('SeasonalListScreen', { year, season: seasons[1] })}>
-                            <ViewDefault style={{ alignItems: 'center' }}>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                            <View style={styles.column}>
+                                <Text style={styles.text}>
                                     {year}
-                                    {/* data[0].year atau year */}
-                                </TextDefault>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
-                                    {/* Spring */}
+                                </Text>
+                                <Text style={styles.text}>
                                     {seasons[1]}
-                                </TextDefault>
-                            </ViewDefault>
+                                </Text>
+                            </View>
                         </GradientBackground>
                         }
                         <Gap width={12} />
                         {seasons[2] &&
                         <GradientBackground paddingHorizontal={15} paddingVertical={5} width={69} height={40} onPress={() => navigation.navigate('SeasonalListScreen', { year, season: seasons[2] })}>
-                            <ViewDefault style={{ alignItems: 'center' }}>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                            <View style={styles.column}>
+                                <Text style={styles.text}>
                                     {year}
-                                    {/* data[0].year atau year */}
-                                </TextDefault>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
-                                    {/* Summer */}
+                                </Text>
+                                <Text style={styles.text}>
                                     {seasons[2]}
-                                </TextDefault>
-                            </ViewDefault>
+                                </Text>
+                            </View>
                         </GradientBackground>
                         }
                         <Gap width={12} />
                         {seasons[3] &&
                         <GradientBackground paddingHorizontal={15} paddingVertical={5} width={69} height={40} onPress={() => navigation.navigate('SeasonalListScreen', { year, season: seasons[3] })}>
-                            <ViewDefault style={{ alignItems: 'center' }}>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
+                            <View style={styles.column}>
+                                <Text style={styles.text}>
                                     {year}
-                                    {/* data[0].year atau year */}
-                                </TextDefault>
-                                <TextDefault style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
-                                    {/* Fall */}
+                                </Text>
+                                <Text style={styles.text}>
                                     {seasons[3]}
-                                </TextDefault>
-                            </ViewDefault>
+                                </Text>
+                            </View>
                         </GradientBackground>
                         }
-                    </ViewDefault>
+                    </View>
                     <Gap height={15} />
-                </ViewDefault>
+                </View>
             ))}
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        marginHorizontal: 24,
+    },
+    butonsRow: {
+        flexDirection: 'row',
+    },
+    column: {
+        alignItems: 'center',
+    },
+    text: {
+        color: 'white',
+        fontSize: 10,
+        fontWeight: '600'
+    }
+})
 
 export default ArchiveList

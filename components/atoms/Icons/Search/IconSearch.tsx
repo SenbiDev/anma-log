@@ -1,5 +1,5 @@
 import React from 'react'
-import { SolidMaterialIcons } from '../../Solid'
+import SolidMaterialIcons from '../../SolidMaterialIcons';
 import { useLightAppTheme } from '../../../../themes'
 
 function IconSearch() {

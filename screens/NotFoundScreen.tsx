@@ -2,9 +2,9 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { RootStackScreenProps } from '../types';
 import { Card } from 'react-native-paper';
 import { useLightAppTheme } from '../themes';
-import ImageBackground from '../components/molecules/ImageBackground/ImageBackground';
-import Gap from '../components/atoms/Gap/Gap';
-import { SolidMaterialIcons } from '../components/atoms/Solid';
+import ImageBackground from '../components/molecules/ImageBackground';
+import Gap from '../components/atoms/Gap';
+// import { SolidMaterialIcons } from '../../atoms';
 
 
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
