@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { GapType } from './type';
 
-function Gap({ width, height }: { width?: number | string, height?: number | string }) {
+function Gap({ width, height }: GapType) {
   return (
     <View style={styles.gap(width, height)} />
   );

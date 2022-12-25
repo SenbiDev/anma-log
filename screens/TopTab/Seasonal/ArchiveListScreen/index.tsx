@@ -1,8 +1,9 @@
 import { View } from "react-native";
 import Gap from "../../../../components/atoms/Gap";
 import { ArchiveList } from "../../../../components";
+import { RootSeasonalTopTabScreenProps } from "../../../../types";
 
-function ArchiveListScreen({ navigation }: any) {
+function ArchiveListScreen({ navigation }: RootSeasonalTopTabScreenProps<'Archive'>) {
     return (
       <View style={{ flex: 1 }} >
         <Gap height={30} />

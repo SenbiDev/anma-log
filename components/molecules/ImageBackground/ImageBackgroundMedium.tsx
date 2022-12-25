@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, ImageBackground, ImageSourcePropType, StyleSheet } from 'react-native';
+import { View, ImageBackground, StyleSheet } from 'react-native';
+import { ImageBackgroundType } from './type';
 
 
-function ImageBackgroundMedium({ source, children }: { source?: ImageSourcePropType, children: React.ReactNode }) {
+function ImageBackgroundMedium({ source, children }: ImageBackgroundType) {
   return (
       <ImageBackground source={source} style={styles.imageSize} imageStyle={{ borderRadius: 10 }}>
             <View style={styles.viewSize}>

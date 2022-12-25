@@ -5,8 +5,9 @@ import Gap from '../../atoms/Gap';
 import ImageBackground from '../ImageBackground';
 import { SolidMaterialIcons } from '../../atoms';
 import { useLightAppTheme } from '../../../themes';
+import { CardType } from './type';
 
-function Card({ type, mal_id, images, title, genres, aired, published, members, score, navigation }: { type: 'anime' | 'manga', mal_id: number, images: any, title: string, genres: string[], aired?: any, published: any, members: number, score: number, navigation: any }) {
+function Card({ type, mal_id, images, title, genres, aired, published, members, score, navigation }: CardType) {
     const lightTheme = useLightAppTheme();
     return (
         <CardRNP style={styles.card(lightTheme.cardColor)}>

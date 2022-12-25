@@ -2,8 +2,9 @@ import React from 'react'
 import { StyleSheet } from 'react-native';
 import { TextInput as TextInputRNP } from 'react-native-paper'
 import { useLightAppTheme } from '../../../themes'
+import { TextInputType } from './type';
 
-function TextInput({ text, title, onChangeText, onClearText }: { text: string, title: string, onChangeText: (text: string) => void, onClearText: () => void }) {
+function TextInput({ text, title, onChangeText, onClearText }: TextInputType) {
     const lightTheme = useLightAppTheme();
     return (
         <TextInputRNP

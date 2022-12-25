@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import Gap from "../../../../components/atoms/Gap";
 import { SeasonalOrFavoriteOfList } from "../../../../components";
+import { RootSeasonalTopTabScreenProps } from "../../../../types";
+import { SeasonalScreenStateType } from "../type";
 
-
-function LastSeasonalScreen({ navigation }: any) {
-    const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+function LastSeasonalScreen({ navigation }: RootSeasonalTopTabScreenProps<'Last'>) {
+    const [seasonalList, setSeasonalList] = useState<SeasonalScreenStateType[]>([]);
     const [seasonalName, setSeasonalName] = useState('');
 
     useEffect(() => {

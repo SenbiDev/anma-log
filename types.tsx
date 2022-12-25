@@ -1,33 +1,16 @@
-/**
- * Learn more about using TypeScript with React Navigation:
- * https://reactnavigation.org/docs/typescript/
- */
-
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
-}
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootBottomTabParamList> | undefined;
-  ListScreen: undefined;
-  TopListScreen: undefined;
-  SeasonalListScreen: undefined;
-  AnimeDetailScreen: undefined;
-  MangaDetailScreen: undefined;
-  Modal: undefined;
-  NotFound: undefined;
+  ListScreen: { type: 'anime' | 'manga', mal_id: number };
+  TopListScreen: { types: 'anime' | 'manga' };
+  SeasonalListScreen: { year: number, season: 'winter' | 'spring' | 'summer' | 'fall' | undefined };
+  AnimeDetailScreen: { mal_id: number };
+  MangaDetailScreen: { mal_id: number };
 };
-
-export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
-  RootStackParamList,
-  Screen
->;
 
 export type RootBottomTabParamList = {
   Anime: undefined;
@@ -37,19 +20,34 @@ export type RootBottomTabParamList = {
   Favorites: NavigatorScreenParams<RootFavoritesTopTabParamList> | undefined;
 };
 
-export type RootTabScreenProps<Screen extends keyof RootBottomTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<RootBottomTabParamList, Screen>,
-  NativeStackScreenProps<RootStackParamList>
->;
-
 export type RootSeasonalTopTabParamList = {
   Last: undefined;
   Now: undefined;
   ['Up Coming']: undefined;
-  Archive: undefined;
+  Archive: { year: number, season: string };
 };
 
 export type RootFavoritesTopTabParamList = {
   Anime: undefined;
   Manga: undefined;
 };
+
+export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
+  RootStackParamList,
+  Screen
+>;
+
+export type RootBottomTabScreenProps<Screen extends keyof RootBottomTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, Screen>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export type RootSeasonalTopTabScreenProps<TopTabScreens extends keyof RootSeasonalTopTabParamList> = CompositeScreenProps<
+  MaterialTopTabScreenProps<RootSeasonalTopTabParamList, TopTabScreens>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export type RootFavoritesTopTabScreenProps<TopTabScreens extends keyof RootFavoritesTopTabParamList> = CompositeScreenProps<
+  MaterialTopTabScreenProps<RootFavoritesTopTabParamList, TopTabScreens>,
+  BottomTabScreenProps<RootBottomTabParamList>
+>;

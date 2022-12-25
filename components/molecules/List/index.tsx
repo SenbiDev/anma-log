@@ -5,10 +5,11 @@ import Item from '../Item';
 import Gap from '../../atoms/Gap';
 import { SolidMaterialIcons } from '../../atoms';
 import { useLightAppTheme } from '../../../themes';
+import { ListType, ListStateType } from './type';
 
-function List({ types, id, navigation }: { types: 'anime' | 'manga', id: number, navigation: any }) {
+function List({ types, id, navigation }: ListType) {
     const lightTheme = useLightAppTheme()
-    const [animeList, setAnimeList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
+    const [animeList, setAnimeList] = useState<ListStateType[]>([]);
     const [text, setText] = useState('1');
     const [limitPage, setLimitPage] = useState(5);
     console.log('check infinite loop')

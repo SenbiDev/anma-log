@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import ImageBackground from '../ImageBackground'
 import Gap from '../../atoms/Gap'
+import { RecommendedListType, RecommendedListStateType } from './type'
 
-function RecommendedList({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
-    const [recommendedAnimeList, setRecommendedAnimeList] = useState<{ mal_id: number, title: string; images: any; }[]>();
+function RecommendedList({type, navigation}: RecommendedListType) {
+    const [recommendedAnimeList, setRecommendedAnimeList] = useState<RecommendedListStateType[]>([]);
 
     useEffect(() => {
         async function fetchRecommendedAnimeList() {

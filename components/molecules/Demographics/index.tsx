@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { GradientBackground, Gap } from '../../atoms';
+import { DemographicsType, DemographicsStateType } from './type';
 
-
-function Demographics({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
-    const [demographicList, setDemographicList] = useState<{ name: string; mal_id: string; }[]>();
+function Demographics({type, navigation}: DemographicsType) {
+    const [demographicList, setDemographicList] = useState<DemographicsStateType[]>([]);
 
     useEffect(() => {
         async function fetchDemographics() {
             try {
                 const result = await fetch(`https://api.jikan.moe/v4/genres/${type}?filter=demographics`);
                 const parseResult = await result.json();
-                const list = parseResult?.data.map(({name, mal_id}: {name: string, mal_id: string}) => ({name, mal_id}));
+                const list = parseResult?.data.map(({name, mal_id}: {name: string, mal_id: number}) => ({name, mal_id}));
                 // console.log('Demographics', JSON.stringify(demographics, null, 4));
                
                 setDemographicList(list);

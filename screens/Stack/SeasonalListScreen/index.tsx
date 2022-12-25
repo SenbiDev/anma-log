@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import Gap from "../../../components/atoms/Gap";
 import { SeasonalOrFavoriteOfList } from "../../../components";
+import { RootStackScreenProps } from "../../../types";
+import { SeasonalListScreenStateType } from "./type";
 
-function SeasonalListScreen({ route, navigation }: any) {
+function SeasonalListScreen({ route, navigation }: RootStackScreenProps<'SeasonalListScreen'>) {
     const { year, season } = route.params
-    const [seasonalList, setSeasonalList] = useState<{ mal_id: number, images: any, title: string, genreList: [], aired: any, members: number, score: number, season: string, year: number }[]>([]);
+    const [seasonalList, setSeasonalList] = useState<SeasonalListScreenStateType[]>([]);
 
     useEffect(() => {
         async function fetchSeasonal() {
@@ -41,7 +43,7 @@ function SeasonalListScreen({ route, navigation }: any) {
     return (
         <View style={{ flex: 1 }} >
             <Gap height={30} />
-            <SeasonalOrFavoriteOfList type='anime' list={seasonalList} label={`${season.toUpperCase()} ${year}`} navigation={navigation} />
+            <SeasonalOrFavoriteOfList type='anime' list={seasonalList} label={`${season?.toUpperCase()} ${year}`} navigation={navigation} />
         </View>
     )
 }

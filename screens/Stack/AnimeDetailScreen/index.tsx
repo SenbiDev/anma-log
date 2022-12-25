@@ -4,15 +4,17 @@ import Gap from "../../../components/atoms/Gap";
 import { SolidMaterialIcons } from "../../../components";
 import { getAnime, storeAnime } from "../../../utils/storage";
 import { useLightAppTheme } from "../../../themes";
+import { RootStackScreenProps } from "../../../types";
+import { AnimeDetailScreenStateType, onFavoritePressType } from "./type";
 
-function AnimeDetailScreen({ route }: any) {
+function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>) {
   const { mal_id } = route.params
   const lightTheme = useLightAppTheme();
-  const [animeDetail, setAnimeDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, season: string, year: number, status: string, episodes: number, duration: string, synopsis: string, title_english: string, source: string, studioList: string[], aired: any, rating: string, licensorList: string[] }>();
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [toggle, setToggle] = useState(true);
+  const [animeDetail, setAnimeDetail] = useState<AnimeDetailScreenStateType>();
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [toggle, setToggle] = useState<boolean>(true);
 
-  const onFavoritePress = async ({ mal_id, images, title, genreList, aired, members, score }: { mal_id: number, images: any, title?: string, genreList?: string[], aired: any, members?: number, score?: number }) => {
+  const onFavoritePress = async ({ mal_id, images, title, genreList, aired, members, score }: onFavoritePressType) => {
     setIsFavorited(!isFavorited);
     const value = { mal_id, images, title, genreList, aired, members, score };
     const data = await getAnime();
@@ -59,7 +61,6 @@ function AnimeDetailScreen({ route }: any) {
 
   return (
     <ScrollView style={styles.scroll}>
-      {/* container1, titleText, genresText, scoreContainer, scoreText */}
       <View style={styles.container1}>
         <View>
           <Text style={styles.titleText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.title}</Text>
@@ -77,126 +78,90 @@ function AnimeDetailScreen({ route }: any) {
         <SolidMaterialIcons name={isFavorited ? 'favorite' : 'favorite-outline'} color='#FF3D00' sizes={20} boxHeight={24} onPress={() => onFavoritePress({ mal_id, images: animeDetail?.images, title: animeDetail?.title, genreList: animeDetail?.genreList, aired: animeDetail?.aired, members: animeDetail?.members, score: animeDetail?.score })} />
       </View>
       <Gap height={30} />
-      {/* imageContainer, image */}
       <View style={styles.imageContainer}>
         <Image source={{ uri: animeDetail?.images.webp.large_image_url }} style={styles.image} />
       </View>
       <Gap height={30} />
-      {/* container2  */}
       <View style={styles.container2}>
         <View style={styles.textContainer} >
-          {/* rankLabel */}
           <Text style={styles.rankLabel(lightTheme.textSolidPrimaryColor)}>Rank</Text>
-          {/* rankText */}
           <Text style={styles.rankText(lightTheme.textSolidPrimaryColor)}>#{animeDetail?.rank ?? 'Unknown'}</Text>
         </View>
 
         <View style={styles.textContainer}>
-          {/* popularityLabel */}
           <Text style={styles.popularityLabel(lightTheme.textSolidPrimaryColor)}>Popularity</Text>
-          {/* popularityText */}
           <Text style={styles.popularityText(lightTheme.textSolidPrimaryColor)}>#{animeDetail?.popularity ?? 'Unknown'}</Text>
         </View>
 
         <View style={styles.textContainer}>
-          {/* membersLabel */}
           <Text style={styles.membersLabel(lightTheme.textSolidPrimaryColor)}>Members</Text>
-          {/* membersText */}
           <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.members ?? 'Unknown'}</Text>
         </View>
 
         <View style={styles.textContainer}>
-          {/* favoritesLabel */}
           <Text style={styles.favoritesLabel(lightTheme.textSolidPrimaryColor)}>Favorites</Text>
-          {/* favoritesText */}
           <Text style={styles.favoritesText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.favorites ?? 'Unknown'}</Text>
         </View>
       </View>
       <Gap height={30} />
-      {/* container2 */}
       <View style={styles.container2}>
         <View style={styles.textContainer} >
-          {/* typeText */}
           <Text style={styles.typeText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.type ?? 'Unknown'},`}</Text>
-          {/* yearText */}
           <Text style={styles.yearText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.year ?? 'Unknown'}`}</Text>
         </View>
-          {/* statusText */}
         <Text style={styles.statusText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.status}</Text>
         <View style={styles.textContainer}>
-          {/* episodesText */}
           <Text style={styles.episodesText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.episodes ?? 'Unknown'} ep,`}</Text>
-          {/* durationText */}
           <Text style={styles.durationText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.duration.replace(' per ep', '')}`}</Text>
         </View>
       </View>
       <Gap height={40} />
-      {/* synopsisContainer */}
       <View style={styles.synopsisContainer}>
-        {/* synopsisLabel */}
         <Text style={styles.synopsisLabel(lightTheme.textSolidPrimaryColor)}>Synopsis</Text>
       </View>
       <Gap height={13} />
-      {/* synopsisText */}
       <Text style={styles.synopsisText(lightTheme.textSolidPrimaryColor)} numberOfLines={toggle ? 5 : 0}>{animeDetail?.synopsis ?? 'Unknown'}</Text>
       <Gap height={10} />
-      {/* arrowIconContainer */}
       <View style={styles.arrowIconContainer}>
         <SolidMaterialIcons name={toggle ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} color={lightTheme.iconSolidPrimaryColor} sizes={20} boxHeight={24} onPress={onTogglePress} />
       </View>
       <Gap height={40} />
       <View>
-        {/* englishLabel */}
         <Text style={styles.englishLabel(lightTheme.textSolidPrimaryColor)}>English</Text>
-        {/* englishText */}
         <Text style={styles.englishText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.title_english ?? 'Unknown'}</Text>
       </View>
       <Gap height={20} />
-
-      {/* container3 */}
       <View style={styles.container3}>
         <View>
           <View>
-            {/* sourceLabel */}
             <Text style={styles.sourceLabel(lightTheme.textSolidPrimaryColor)}>Source</Text>
-            {/* sourceText */}
             <Text style={styles.sourceText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.source ?? 'Unknown'}</Text>
           </View>
           <Gap height={20} />
           <View>
-            {/* studioLabel */}
             <Text style={styles.studioLabel(lightTheme.textSolidPrimaryColor)}>Studio</Text>
-            {/* studioText */}
             <Text style={styles.studioText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.studioList.join(', ') !== '' ? animeDetail?.studioList.join(', ') : 'Unknown'}</Text>
           </View>
           <Gap height={20} />
           <View>
-            {/* ratingLabel */}
             <Text style={styles.ratingLabel(lightTheme.textSolidPrimaryColor)}>Rating</Text>
-            {/* ratingText */}
             <Text style={styles.ratingText(lightTheme.textSolidPrimaryColor)} numberOfLines={4} >{animeDetail?.rating ?? 'Unknown'}</Text>
           </View>
         </View>
         <Gap width={80} />
         <View>
           <View>
-            {/* seasonLabel */}
             <Text style={styles.seasonLabel(lightTheme.textSolidPrimaryColor)}>Season</Text>
-            {/* seasonText */}
             <Text style={styles.seasonText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.season?.toUpperCase() ?? 'Unknown'} ${animeDetail?.year ?? 'Unknown'}`}</Text>
           </View>
           <Gap height={20} />
           <View>
-            {/* airedLabel */}
             <Text style={styles.airedLabel(lightTheme.textSolidPrimaryColor)}>Aired</Text>
-            {/* airedText */}
             <Text style={styles.airedText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.aired.string ?? 'Unknown'}</Text>
           </View>
           <Gap height={20} />
           <View>
-            {/* licensorLabel */}
             <Text style={styles.licensorLabel(lightTheme.textSolidPrimaryColor)}>Licensor</Text>
-            {/* licensorText */}
             <Text style={styles.licensorText(lightTheme.textSolidPrimaryColor)} numberOfLines={4}>{animeDetail?.licensorList.join(', ') !== '' ? animeDetail?.licensorList.join(', ') : 'Unknown'}</Text>
           </View>
         </View>

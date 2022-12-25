@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { GradientBackground, Gap } from '../../atoms';
+import { GenresType, GenresStateType } from './type';
 
-
-function Genres({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
-    const [genreList, setGenreList] = useState<{ name: string; mal_id: string; }[]>();
+function Genres({type, navigation}: GenresType) {
+    const [genreList, setGenreList] = useState<GenresStateType[]>([]);
 
     useEffect(() => {
         async function fetchGenres() {
@@ -12,7 +12,7 @@ function Genres({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
                 const result = await fetch(`https://api.jikan.moe/v4/genres/${type}?filter=genres`);
                 const parseResult = await result.json();
                 const filterResult = parseResult?.data.filter((result: any) => result.name !== 'Boys Love' && result.name !== 'Girls Love');
-                const list = filterResult.map(({name, mal_id}: {name: string, mal_id: string}) => ({name, mal_id}));
+                const list = filterResult.map(({name, mal_id}: {name: string, mal_id: number}) => ({name, mal_id}));
                 // console.log('Genres', JSON.stringify(genres, null, 4));
                
                 setGenreList(list);

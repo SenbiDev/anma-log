@@ -1,7 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import { GradientBackgroundType } from './type';
 
-const GradientBackground = ({ paddingHorizontal, paddingVertical, width, height, alignItems, onPress, children }: { paddingHorizontal: number, paddingVertical: number, width?: number | string, height?: number | string, alignItems?: 'baseline' | 'center' | 'flex-start' | 'flex-end' | 'stretch', onPress: () => void, children: React.ReactNode }) => {
+const GradientBackground = ({ paddingHorizontal, paddingVertical, width, height, alignItems, onPress, children }: GradientBackgroundType) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <LinearGradient
@@ -17,7 +18,7 @@ const GradientBackground = ({ paddingHorizontal, paddingVertical, width, height,
 }
 
 const styles = StyleSheet.create<any>({
-    linearGradient: ({ paddingHorizontal, paddingVertical, width, height, alignItems, onPress}: { paddingHorizontal: number, paddingVertical: number, width?: number | string, height?: number | string, alignItems?: 'baseline' | 'center' | 'flex-start' | 'flex-end' | 'stretch', onPress: () => void }) => ({
+    linearGradient: ({ paddingHorizontal, paddingVertical, width, height, alignItems }: Omit<GradientBackgroundType, 'onPress' | 'children'>) => ({
         alignSelf: 'flex-start',
         paddingHorizontal: paddingHorizontal,
         paddingVertical: paddingVertical,

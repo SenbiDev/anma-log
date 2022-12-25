@@ -1,7 +1,8 @@
 import { ScrollView } from "react-native"
 import { List } from "../../../components";
+import { RootStackScreenProps } from "../../../types";
 
-function ListScreen({ route, navigation }: any) {
+function ListScreen({ route, navigation }: RootStackScreenProps<'ListScreen'>) {
     const { type, mal_id } = route.params
     return (
         <ScrollView>

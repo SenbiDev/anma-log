@@ -3,8 +3,9 @@ import { ScrollView, View, Text, StyleSheet }  from 'react-native';
 import Card from '../Card';
 import Gap from '../../atoms/Gap';
 import { useLightAppTheme } from '../../../themes';
+import { SeasonalOrFavoriteOfListType } from './type';
 
-function SeasonalOrFavoriteOfList({ type, list, label, navigation }: { type: 'anime' | 'manga', list: { mal_id: number, images: any, title: string, genreList: string[], aired?: any, published?: any, members: number, score: number, season?: string, year?: number }[], label: string, navigation: any }) {
+function SeasonalOrFavoriteOfList({ type, list, label, navigation }: SeasonalOrFavoriteOfListType) {
   const lightTheme = useLightAppTheme();
   return (
     <View>

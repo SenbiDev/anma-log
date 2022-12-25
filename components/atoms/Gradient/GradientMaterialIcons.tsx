@@ -1,10 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
+import { GradientMaterialIconsType } from './type';
 
-const GradientMaterialIcons = (props: any & {
-  name: React.ComponentProps<typeof MaterialIcons>['name'];
-}) => {
+const GradientMaterialIcons = (props: any & GradientMaterialIconsType) => {
   return (
     <MaskedView maskElement={<MaterialIcons {...props} />}>
       <LinearGradient

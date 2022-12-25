@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { GradientBackground, Gap } from '../../atoms';
+import { ArchiveListType, ArchiveListStateType } from './type';
 
-function ArchiveList({navigation}: any) {
-    const [archives, setArchives] = useState<{ year: number, seasons:  | ["winter"] | ["winter", "spring"] | ["winter", "spring", "summer"] | ["winter", "spring", "summer", "fall"] }[]>([]);
+function ArchiveList({navigation}: ArchiveListType) {
+    const [archives, setArchives] = useState<ArchiveListStateType[]>([]);
 
     useEffect(() => {
         async function fetchArchives() {

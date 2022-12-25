@@ -4,9 +4,9 @@ import { Card } from 'react-native-paper';
 import Gap from '../../atoms/Gap';
 import { SolidMaterialIcons } from '../../atoms';
 import { useLightAppTheme } from '../../../themes';
+import { ItemType } from './type';
 
-
-function Item({ types, mal_id, images, title, type, episodes, volumes, aired, published, members, score, navigation }: { types: 'anime' | 'manga', mal_id: number, images: any, title: string, type: string, episodes?: number, volumes?: number, aired?: any, published?: any, members: number, score: number, navigation: any }) {
+function Item({ types, mal_id, images, title, type, episodes, volumes, aired, published, members, score, navigation }: ItemType) {
     const lightTheme = useLightAppTheme();
     const epsOrVols = episodes ? `(${episodes ?? 'Unknown'} eps)` : `(${volumes ?? 'Unknown'} vols)`;
     return (

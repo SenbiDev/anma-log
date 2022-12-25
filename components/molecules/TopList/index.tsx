@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { View } from 'react-native';
 import Item from '../Item';
 import Gap from '../../atoms/Gap';
+import { TopListType, TopListStateType } from './type';
 
-function TopList({ types, navigation }: { types: 'anime' | 'manga', navigation: any }) {
-    const [topList, setTopList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes?: number, volumes?: number, aired?: any, published?: any, members: number, score: number }[]>();
+function TopList({ types, navigation }: TopListType) {
+    const [topList, setTopList] = useState<TopListStateType[]>();
 
     useEffect(() => {
         async function fetchTopList() {

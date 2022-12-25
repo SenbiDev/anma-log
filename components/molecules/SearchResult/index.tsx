@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView } from 'react-native';
 import Item from '../Item';
 import Gap from '../../atoms/Gap';
+import { SearchResultType, SearchResultStateType } from './type';
 
-function SearchResult({ types, letter, navigation }: { types: 'anime' | 'manga' | string, letter: string, navigation: any }) {
-    const [searchlist, setSearchList] = useState<{ mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }[]>();
+function SearchResult({ types, letter, navigation }: SearchResultType) {
+    const [searchlist, setSearchList] = useState<SearchResultStateType[]>([]);
     
     useEffect(() => {
         async function fetchSearchList() {

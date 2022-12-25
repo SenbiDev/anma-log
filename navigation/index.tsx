@@ -5,10 +5,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import { RootStackParamList, RootBottomTabParamList, RootTabScreenProps, RootSeasonalTopTabParamList, RootFavoritesTopTabParamList } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
+import { RootStackParamList, RootBottomTabParamList, RootSeasonalTopTabParamList, RootFavoritesTopTabParamList } from '../types';
 import { BottomTabNavigatorCustom, TopTabNavigatorCustom } from '../components';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs/lib/typescript/src/types';
@@ -24,7 +21,6 @@ const FavoritesTopTab = createMaterialTopTabNavigator<RootFavoritesTopTabParamLi
 export default function Navigation({ colorScheme }: { colorScheme: any }) {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
       theme={colorScheme}>
       <RootNavigator />
     </NavigationContainer>
@@ -40,10 +36,6 @@ function RootNavigator() {
       <Stack.Screen name="SeasonalListScreen" component={SeasonalListScreen} options={{ headerTitle: 'Seasonal Anime List', headerTitleAlign: 'center' }} />
       <Stack.Screen name="AnimeDetailScreen" component={AnimeDetailScreen} options={{ headerTitle: 'Anime Detail', headerTitleAlign: 'center' }} />
       <Stack.Screen name="MangaDetailScreen" component={MangaDetailScreen} options={{ headerTitle: 'Manga Detail', headerTitleAlign: 'center' }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }

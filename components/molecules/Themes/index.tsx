@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { GradientBackground, Gap } from '../../atoms';
+import { ThemesType, ThemesStateType } from './type';
 
-function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) {
-    const [themeList, setThemeList] = useState<[[{ name: string; mal_id: string; }, { name: string; mal_id: string; }]]>();
+function Themes({type, navigation}: ThemesType) {
+    const [themeList, setThemeList] = useState<ThemesStateType>();
 
     useEffect(() => {
         async function fetchThemes() {
@@ -20,17 +21,13 @@ function Themes({type, navigation}: {type: 'anime' | 'manga', navigation: any}) 
                         result.name !== 'Mahou Shoujo' && result.name !== 'Performing Arts' &&
                         result.name !== 'Pets' && result.name !== 'Reverse Harem' && result.name !== 'Showbiz'
                     );
+                    
                 let first = -2;
                 let second = -1;
-                /*
-                    [0,1]
-                    [2,3]
-                    [4,5]
-                    [6,7]
-                */
-                const mapResult = filterResult.map(({ name, mal_id }: { name: string, mal_id: string }) => ({ name, mal_id }));
+       
+                const mapResult = filterResult.map(({ name, mal_id }: { name: string, mal_id: number }) => ({ name, mal_id }));
                 const list = mapResult.map(() => ([mapResult[first += 2], mapResult[second += 2]]));
-                const listWithoutUndefined = list.filter((matrix: [{ name: string; mal_id: string; }, { name: string; mal_id: string; }]) => matrix[0] !== undefined && matrix[1] !== undefined);
+                const listWithoutUndefined = list.filter((matrix: [{ name: string; mal_id: number; }, { name: string; mal_id: number; }]) => matrix[0] !== undefined && matrix[1] !== undefined);
     
                 setThemeList(() => listWithoutUndefined);
             } catch {

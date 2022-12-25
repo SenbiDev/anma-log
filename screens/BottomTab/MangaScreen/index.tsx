@@ -3,8 +3,9 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 
 import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
+import { RootBottomTabScreenProps } from '../../../types';
 
-function MangaScreen({ navigation }: any) {
+function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
     return (
         <ScrollView>
             <View style={styles.container}>

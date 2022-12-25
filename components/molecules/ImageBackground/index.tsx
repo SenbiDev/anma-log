@@ -1,9 +1,10 @@
 import React from 'react';
-import { ImageSourcePropType } from 'react-native';
 import ImageBackgroundMedium from './ImageBackgroundMedium';
 import ImageBackgroundLarge from './ImageBackgroundLarge';
+import { ImageBackgroundType } from './type';
 
-function ImageBackground({ size, source, children }: { size: 'm' | 'l', source?: ImageSourcePropType, children: React.ReactNode }) {
+
+function ImageBackground({ size, source, children }: { size: 'm' | 'l' } & ImageBackgroundType) {
   return (
     <>
         { size === 'm' &&

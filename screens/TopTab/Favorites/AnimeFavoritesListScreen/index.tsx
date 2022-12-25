@@ -4,9 +4,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getAnime } from '../../../../utils/storage';
 import Gap from '../../../../components/atoms/Gap';
 import { SeasonalOrFavoriteOfList } from '../../../../components';
+import { RootFavoritesTopTabScreenProps } from '../../../../types';
+import { AnimeFavoritesListScreenStateType } from './type';
 
-function AnimeFavoritesListScreen({ navigation }: any) {
-    const [animeFavoriteList, setAnimeFavoriteList] = useState<{ mal_id: number, images: any, title: string, genreList: string[], aired: any, members: number, score: number }[]>([]);
+function AnimeFavoritesListScreen({ navigation }: RootFavoritesTopTabScreenProps<'Anime'>) {
+    const [animeFavoriteList, setAnimeFavoriteList] = useState<AnimeFavoritesListScreenStateType[]>([]);
     console.log('check inifinite loop')
   
     useFocusEffect(() => {

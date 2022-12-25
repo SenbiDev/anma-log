@@ -4,8 +4,9 @@ import Gap from '../../../components/atoms/Gap';
 import Accordion from "../../../components/atoms/Accordion";
 import TextInput from "../../../components/atoms/TextInput";
 import { SearchResult } from "../../../components";
+import { RootBottomTabScreenProps } from '../../../types';
 
-function SearchScreen({ navigation }: any) {
+function SearchScreen({ navigation }: RootBottomTabScreenProps<'Search'>) {
     const [title, setTitle] = useState('Anime');
     const [text, setText] = useState('');
 

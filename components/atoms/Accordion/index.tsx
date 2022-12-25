@@ -4,10 +4,11 @@ import { List, Button } from 'react-native-paper'
 import { Text } from '../../Themed';
 import { useLightAppTheme } from '../../../themes';
 import SolidMaterialIcons from '../SolidMaterialIcons';
+import { AccordionType } from './type';
 
-const Accordion = ({ title, handleTitlePress }: { title: string, handleTitlePress: (title: string) => void }) => {
+const Accordion = ({ title, handleTitlePress }: AccordionType) => {
   const lightTheme = useLightAppTheme();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const handlePress = () => setExpanded(!expanded);
 

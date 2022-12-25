@@ -4,15 +4,17 @@ import Gap from "../../../components/atoms/Gap";
 import { SolidMaterialIcons } from "../../../components";
 import { getManga, storeManga } from "../../../utils/storage";
 import { useLightAppTheme } from "../../../themes";
+import { RootStackScreenProps } from "../../../types";
+import { MangaDetailScreenStateType, onFavoritePressType } from "./type";
 
-function MangaDetailScreen({ route }: any) {
+function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>) {
     const { mal_id } = route.params
     const lightTheme = useLightAppTheme();
-    const [mangaDetail, setMangaDetail] = useState<{ title: string, genreList: string[], score: number, images: any, rank: number, popularity: number, members: number, favorites: number, type: string, status: string, volumes: number, chapters: number, synopsis: string, title_english: string, published: any, authorList: string[], serializationList: string[] }>();
-    const [isFavorited, setIsFavorited] = useState(false);
-    const [toggle, setToggle] = useState(true);
+    const [mangaDetail, setMangaDetail] = useState<MangaDetailScreenStateType>();
+    const [isFavorited, setIsFavorited] = useState<boolean>(false);
+    const [toggle, setToggle] = useState<boolean>(true);
 
-    const onFavoritePress = async ({ mal_id, images, title, genreList, published, members, score }: { mal_id: number, images: any, title?: string, genreList?: string[], published: any, members?: number, score?: number }) => {
+    const onFavoritePress = async ({ mal_id, images, title, genreList, published, members, score }: onFavoritePressType) => {
         setIsFavorited(!isFavorited);
         const value = { mal_id, images, title, genreList, published, members, score };
         const data = await getManga();
