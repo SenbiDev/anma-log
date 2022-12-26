@@ -1,31 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { GradientBackground, Gap } from '../../atoms';
-import { DemographicsType, DemographicsStateType } from './type';
+import { DemographicsType } from './type';
 
-function Demographics({type, navigation}: DemographicsType) {
-    const [demographicList, setDemographicList] = useState<DemographicsStateType[]>([]);
-
-    useEffect(() => {
-        async function fetchDemographics() {
-            try {
-                const result = await fetch(`https://api.jikan.moe/v4/genres/${type}?filter=demographics`);
-                const parseResult = await result.json();
-                const list = parseResult?.data.map(({name, mal_id}: {name: string, mal_id: number}) => ({name, mal_id}));
-                // console.log('Demographics', JSON.stringify(demographics, null, 4));
-               
-                setDemographicList(list);
-                
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
-        }
-
-        setTimeout(() => {
-            fetchDemographics()
-        },2000)
-    }, []);
-
+function Demographics({type, demographicList, navigation}: DemographicsType) {
     return (
         <ScrollView style={styles.scroll} horizontal showsHorizontalScrollIndicator={false}>
             {demographicList?.map(({name, mal_id}, index) => (

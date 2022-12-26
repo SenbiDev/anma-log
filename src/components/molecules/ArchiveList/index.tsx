@@ -1,30 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { GradientBackground, Gap } from '../../atoms';
-import { ArchiveListType, ArchiveListStateType } from './type';
+import { ArchiveListType } from './type';
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
+import { selectArchiveList, archiveListAsync } from '../../../redux/reducers/archiveListSlice';
 
 function ArchiveList({navigation}: ArchiveListType) {
-    const [archives, setArchives] = useState<ArchiveListStateType[]>([]);
+    const archives = useAppSelector(selectArchiveList);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        async function fetchArchives() {
-            try {
-
-                const result = await fetch('https://api.jikan.moe/v4/seasons');
-                const parseResult = await result.json();
-                const filterResult = parseResult.data.filter(({ year }: { year: number }) => year >= 1999);
-
-                // console.log(JSON.stringify(parseResult.data, null, 3));
-                setArchives(() => filterResult);
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
-        }
-
-        // setTimeout(() => {
-            fetchArchives()
-        // }, 1500)
-    }, []);
+        setTimeout(() => {
+            dispatch(archiveListAsync()); 
+        }, 1500)
+    }, [dispatch]);
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>

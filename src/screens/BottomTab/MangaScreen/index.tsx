@@ -1,30 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
 import { RootBottomTabScreenProps } from '../../../navigation/type';
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
+import { selectRecommendedMangaList } from '../../../redux/reducers/recommendedMangaListSlice';
+import { selectMangaGenreList } from '../../../redux/reducers/mangaGenreListSlice';
+import { selectMangaThemeList } from '../../../redux/reducers/mangaThemeListSlice';
+import { selectMangaDemographicList } from '../../../redux/reducers/mangaDemographicListSlice';
+import { selectTopThreeMangaList } from '../../../redux/reducers/topThreeMangaListSlice';
+import { recommendedMangaListAsync } from '../../../redux/reducers/recommendedMangaListSlice';
+import { mangaGenreListAsync } from '../../../redux/reducers/mangaGenreListSlice';
+import { mangaThemeListAsync } from '../../../redux/reducers/mangaThemeListSlice';
+import { mangaDemographicListAsync } from '../../../redux/reducers/mangaDemographicListSlice';
+import { topThreeMangaListAsync } from '../../../redux/reducers/topThreeMangaListSlice';
 
 function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
+    const recommendedList = useAppSelector(selectRecommendedMangaList);
+    const genreList = useAppSelector(selectMangaGenreList);
+    const themeList = useAppSelector(selectMangaThemeList);
+    const demographicList = useAppSelector(selectMangaDemographicList);
+    const topThreeList = useAppSelector(selectTopThreeMangaList);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        setTimeout(() => dispatch(recommendedMangaListAsync()), 500);
+        setTimeout(() => dispatch(mangaGenreListAsync()), 1000);
+        setTimeout(() => dispatch(mangaThemeListAsync()), 1500);
+        setTimeout(() => dispatch(mangaDemographicListAsync()), 3000);
+        setTimeout(() => dispatch(topThreeMangaListAsync()), 3500);
+    }, [dispatch])
+
     return (
         <ScrollView>
             <View style={styles.container}>
                 {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <GradientText style={styles.recommendedGradientText} >Recommended Manga</GradientText>
                 <Gap height={15} />
-                <RecommendedList type='manga' navigation={navigation} />
+                <RecommendedList type='manga' recommendedList={recommendedList} navigation={navigation} />
                 <Gap height={50} />
                 <GradientText style={styles.genresGradientText} >Genres</GradientText>
                 <Gap height={12} />
-                <Genres type='manga' navigation={navigation} />
+                <Genres type='manga' genreList={genreList} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.themesGradientText} >Themes</GradientText>
                 <Gap height={12} />
-                <Themes type='manga' navigation={navigation} />
+                <Themes type='manga' themeList={themeList} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.demographicsGradientText} >Demographics</GradientText>
                 <Gap height={12} />
-                <Demographics type='manga' navigation={navigation} />
+                <Demographics type='manga' demographicList={demographicList} navigation={navigation} />
                 <Gap height={50} />
 
                 <View style={styles.row}>
@@ -34,7 +60,7 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
-                <TopThree types='manga' navigation={navigation} />
+                <TopThree types='manga' topThreeList={topThreeList} navigation={navigation} />
             </View>
         </ScrollView>
     )

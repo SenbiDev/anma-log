@@ -1,30 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
 import { RootBottomTabScreenProps } from '../../../navigation/type';
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
+import { selectRecommendedList } from '../../../redux/reducers/recommendedAnimeListSlice';
+import { selectAnimeGenreList } from '../../../redux/reducers/animeGenreListSlice';
+import { selectAnimeThemeList } from '../../../redux/reducers/animeThemeListSlice';
+import { selectAnimeDemographicList } from '../../../redux/reducers/animeDemographicListSlice';
+import { selectTopThreeAnimeList } from '../../../redux/reducers/topThreeAnimeListSlice';
+import { recommendedAnimeListAsync } from '../../../redux/reducers/recommendedAnimeListSlice';
+import { animeGenreListAsync } from '../../../redux/reducers/animeGenreListSlice';
+import { animeThemeListAsync } from '../../../redux/reducers/animeThemeListSlice';
+import { animeDemographicListAsync } from '../../../redux/reducers/animeDemographicListSlice';
+import { topThreeAnimeListAsync } from '../../../redux/reducers/topThreeAnimeListSlice';
 
 function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
+    const recommendedList = useAppSelector(selectRecommendedList);
+    const genreList = useAppSelector(selectAnimeGenreList);
+    const themeList = useAppSelector(selectAnimeThemeList);
+    const demographicList = useAppSelector(selectAnimeDemographicList);
+    const topThreeList = useAppSelector(selectTopThreeAnimeList);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        setTimeout(() => dispatch(recommendedAnimeListAsync()), 500);
+        setTimeout(() => dispatch(animeGenreListAsync()), 1000);
+        setTimeout(() => dispatch(animeThemeListAsync()), 1500);
+        setTimeout(() => dispatch(animeDemographicListAsync()), 3000);
+        setTimeout(() => dispatch(topThreeAnimeListAsync()), 3500);
+    }, [dispatch])
+
     return (
         <ScrollView>
             <View style={styles.container}>
                 {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <GradientText style={styles.recommendedGradientText} >Recommended Anime</GradientText>
                 <Gap height={15} />
-                <RecommendedList type='anime' navigation={navigation} />
+                <RecommendedList type='anime' recommendedList={recommendedList} navigation={navigation} />
                 <Gap height={50} />
                 <GradientText style={styles.genresGradientText} >Genres</GradientText>
                 <Gap height={12} />
-                <Genres type='anime' navigation={navigation} />
+                <Genres type='anime' genreList={genreList} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.themesGradientText} >Themes</GradientText>
                 <Gap height={12} />
-                <Themes type='anime' navigation={navigation} />
+                <Themes type='anime' themeList={themeList} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.demographicsGradientText} >Demographics</GradientText>
                 <Gap height={12} />
-                <Demographics type='anime' navigation={navigation} />
+                <Demographics type='anime' demographicList={demographicList} navigation={navigation} />
                 <Gap height={50} />
 
                 <View style={styles.row}>
@@ -34,7 +60,7 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
-                <TopThree types='anime' navigation={navigation} />
+                <TopThree types='anime' topThreeList={topThreeList} navigation={navigation} />
             </View>
         </ScrollView>
     )

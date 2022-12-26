@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native';
 import Item from '../Item';
 import Gap from '../../atoms/Gap';
-import { TopListType, TopListStateType } from './type';
+import { TopListType } from './type';
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
+import { selectTopList, topListAsync, setTopListToInitial } from '../../../redux/reducers/topListSlice';
 
 function TopList({ types, navigation }: TopListType) {
-    const [topList, setTopList] = useState<TopListStateType[]>();
+    const topList = useAppSelector(selectTopList);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        async function fetchTopList() {
-            try {
-                const result = await fetch(`https://api.jikan.moe/v4/top/${types}?type=tv`);
-                const parseResult = await result.json();
-                const list = parseResult?.data?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }: { mal_id: number, images: any, title: string, type: string, episodes?: number, volumes?: number, aired?: any, published?: any, members: number, score: number }) => ({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }));
-                // console.log('Top Anime List', JSON.stringify(list, null, 4));
+        dispatch(topListAsync(types));
 
-                setTopList(list);
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
+        return () => {
+            dispatch(setTopListToInitial());
         }
+    }, [dispatch])
 
-        setTimeout(async () => {
-            fetchTopList();
-        }, 3500)
-    }, [])
-    
     return (
         <>
             {topList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (

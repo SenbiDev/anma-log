@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export type GenresType = {
     type: 'anime' | 'manga';
+    genreList: GenresStateType[];
     navigation: CompositeNavigationProp<
         BottomTabNavigationProp<RootBottomTabParamList, 'Anime' | 'Manga', undefined>,
         NativeStackNavigationProp<RootStackParamList, 'Root', undefined>

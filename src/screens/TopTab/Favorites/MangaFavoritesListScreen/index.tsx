@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { getManga } from '../../../../utils/storage';
 import Gap from '../../../../components/atoms/Gap';
 import { SeasonalOrFavoriteOfList } from '../../../../components';
 import { RootFavoritesTopTabScreenProps } from '../../../../navigation/type';
-import { MangaFavoritesListScreenStateType } from './type';
+import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
+import { selectMangaFavoriteList, mangaFavoriteListAsync } from '../../../../redux/reducers/mangaFavoriteListSlice';
 
 function MangaFavoritesListScreen({ navigation }: RootFavoritesTopTabScreenProps<'Manga'>) {
-    const [mangaFavoriteList, setMangaFavoriteList] = useState<MangaFavoritesListScreenStateType[]>([]);
+    const mangaFavoriteList = useAppSelector(selectMangaFavoriteList);
+    let dispatch: any = useAppDispatch();
     console.log('check inifinite loop')
 
     useFocusEffect(() => {
-        let getMangaFavoriteList: any = async () => {
-            try {
-                const getMangaFavorites = await getManga();
-                setMangaFavoriteList(getMangaFavorites)
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
-        }
-        getMangaFavoriteList()
+        dispatch(mangaFavoriteListAsync());
 
         return () => {
-            getMangaFavoriteList = null;
+            dispatch = null;
         }
     });
 

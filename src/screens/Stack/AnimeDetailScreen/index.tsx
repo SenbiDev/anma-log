@@ -5,12 +5,15 @@ import { SolidMaterialIcons } from "../../../components";
 import { getAnime, storeAnime } from "../../../utils/storage";
 import { useLightAppTheme } from "../../../themes";
 import { RootStackScreenProps } from "../../../navigation/type";
-import { AnimeDetailScreenStateType, onFavoritePressType } from "./type";
+import { onFavoritePressType } from "./type";
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
+import { selectAnimeDetail, animeDetailAsync, setAnimeDetailToInitial } from "../../../redux/reducers/animeDetailSlice";
 
 function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>) {
   const { mal_id } = route.params
   const lightTheme = useLightAppTheme();
-  const [animeDetail, setAnimeDetail] = useState<AnimeDetailScreenStateType>();
+  const animeDetail = useAppSelector(selectAnimeDetail);
+  const dispatch = useAppDispatch();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(true);
 
@@ -19,6 +22,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
     const value = { mal_id, images, title, genreList, aired, members, score };
     const data = await getAnime();
     console.log('STORAGE', JSON.stringify(data, null, 4));
+
     if (isFavorited) {
       const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
       storeAnime(valueAfterDelete);
@@ -32,32 +36,24 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
   };
 
   useEffect(() => {
-    async function fetchAnimeDetail() {
-      try {
-        const result = await fetch(`https://api.jikan.moe/v4/anime/${mal_id}/full`);
-        const parseResult = await result.json();
-        const { title, genres, score, images, rank, popularity, members, favorites, type, season, year, status, episodes, duration, synopsis, title_english, source, studios, aired, rating, licensors } = parseResult?.data;
-        const genreList = genres.map(({ name }: { name: string }) => name);
-        const studioList = studios.map(({ name }: { name: string }) => name);
-        const licensorList = licensors.map(({ name }: { name: string }) => name);
+    dispatch(animeDetailAsync(mal_id));
 
-        // console.log('ANIME DETAIL', JSON.stringify(parseResult?.data, null, 4));
+    async function isAnimeFavorited() {
+      const getAnimeFavoriteList = await getAnime();
+      const getList = getAnimeFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
+      const isExist = getList[0]?.mal_id ? true : false;
+      console.log('getAnimeFavoriteList: ', JSON.stringify(getAnimeFavoriteList, null, 3));
+      console.log('getList: ', JSON.stringify(getList, null, 3));
+      console.log('is EXIST: ', isExist);
+      setIsFavorited(isExist);
+    };
 
-        setAnimeDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, season, year, status, episodes, duration, synopsis, title_english, source, studioList, aired, rating, licensorList });
-        const getAnimeFavoriteList = await getAnime();
-        const getList = getAnimeFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
-        const isExist = getList[0]?.mal_id ? true : false;
-        console.log('getAnimeFavoriteList: ', JSON.stringify(getAnimeFavoriteList, null, 3));
-        console.log('getList: ', JSON.stringify(getList, null, 3));
-        console.log('is EXIST: ', isExist);
-        setIsFavorited(isExist);
-      } catch {
-        alert('Koneksi Jaringan Lambat')
-      }
+    isAnimeFavorited();
+
+    return () => {
+      dispatch(setAnimeDetailToInitial());
     }
-
-    fetchAnimeDetail()
-  }, [])
+  }, [dispatch]);
 
   return (
     <ScrollView style={styles.scroll}>
@@ -65,7 +61,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
         <View>
           <Text style={styles.titleText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.title}</Text>
           <Gap height={5} />
-          <Text style={styles.genresText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.genreList.join(', ')}</Text>
+          <Text style={styles.genresText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.genreList?.join(', ')}</Text>
           <Gap height={5} />
           <View style={styles.scoreContainer}>
             <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
@@ -79,7 +75,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
       </View>
       <Gap height={30} />
       <View style={styles.imageContainer}>
-        <Image source={{ uri: animeDetail?.images.webp.large_image_url }} style={styles.image} />
+        <Image source={{ uri: animeDetail?.images?.webp.large_image_url }} style={styles.image} />
       </View>
       <Gap height={30} />
       <View style={styles.container2}>
@@ -112,7 +108,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
         <Text style={styles.statusText(lightTheme.textSolidPrimaryColor)}>{animeDetail?.status}</Text>
         <View style={styles.textContainer}>
           <Text style={styles.episodesText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.episodes ?? 'Unknown'} ep,`}</Text>
-          <Text style={styles.durationText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.duration.replace(' per ep', '')}`}</Text>
+          <Text style={styles.durationText(lightTheme.textSolidPrimaryColor)}>{`${animeDetail?.duration?.replace(' per ep', '')}`}</Text>
         </View>
       </View>
       <Gap height={40} />
@@ -140,7 +136,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
           <Gap height={20} />
           <View>
             <Text style={styles.studioLabel(lightTheme.textSolidPrimaryColor)}>Studio</Text>
-            <Text style={styles.studioText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.studioList.join(', ') !== '' ? animeDetail?.studioList.join(', ') : 'Unknown'}</Text>
+            <Text style={styles.studioText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.studioList?.join(', ') !== '' ? animeDetail?.studioList?.join(', ') : 'Unknown'}</Text>
           </View>
           <Gap height={20} />
           <View>
@@ -157,12 +153,12 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
           <Gap height={20} />
           <View>
             <Text style={styles.airedLabel(lightTheme.textSolidPrimaryColor)}>Aired</Text>
-            <Text style={styles.airedText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.aired.string ?? 'Unknown'}</Text>
+            <Text style={styles.airedText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{animeDetail?.aired?.string ?? 'Unknown'}</Text>
           </View>
           <Gap height={20} />
           <View>
             <Text style={styles.licensorLabel(lightTheme.textSolidPrimaryColor)}>Licensor</Text>
-            <Text style={styles.licensorText(lightTheme.textSolidPrimaryColor)} numberOfLines={4}>{animeDetail?.licensorList.join(', ') !== '' ? animeDetail?.licensorList.join(', ') : 'Unknown'}</Text>
+            <Text style={styles.licensorText(lightTheme.textSolidPrimaryColor)} numberOfLines={4}>{animeDetail?.licensorList?.join(', ') !== '' ? animeDetail?.licensorList?.join(', ') : 'Unknown'}</Text>
           </View>
         </View>
 
@@ -188,6 +184,7 @@ const styles = StyleSheet.create<any>({
     color: color
   }),
   genresText: (color: string) => ({
+    width: 235,
     fontSize: 12,
     fontFamily: 'poppins-regular',
     color: color

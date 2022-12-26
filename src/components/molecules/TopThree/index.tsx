@@ -2,31 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { View } from 'react-native';
 import Item from '../Item';
 import Gap from '../../atoms/Gap';
-import { TopThreeType, TopThreeStateType } from './type';
+import { TopThreeType } from './type';
 
-function TopThree({ types, navigation }: TopThreeType) {
-    const [topThreeList, setTopThreeList] = useState<TopThreeStateType[]>();
-
-    useEffect(() => {
-        async function fetchTopThree() {
-            try {
-                const result = await fetch(`https://api.jikan.moe/v4/top/${types}?type=tv`);
-                const parseResult = await result.json();
-                const list = parseResult?.data?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }: { mal_id: number, images: any, title: string, type: string, episodes?: number, volumes?: number, aired?: any, published?: any, members: number, score: number }) => ({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }));
-                // console.log('Top Anime List', JSON.stringify(list, null, 4));
-
-                const topThree = [list[0], list[1], list[2]]
-                setTopThreeList(topThree);
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
-        }
-
-        setTimeout(async () => {
-            fetchTopThree();
-        }, 3500)
-    }, [])
-    
+function TopThree({ types, topThreeList, navigation }: TopThreeType) {
     return (
         <>
             {topThreeList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (

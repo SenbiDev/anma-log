@@ -5,12 +5,15 @@ import { SolidMaterialIcons } from "../../../components";
 import { getManga, storeManga } from "../../../utils/storage";
 import { useLightAppTheme } from "../../../themes";
 import { RootStackScreenProps } from "../../../navigation/type";
-import { MangaDetailScreenStateType, onFavoritePressType } from "./type";
+import { onFavoritePressType } from "./type";
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
+import { selectMangaDetail, mangaDetailAsync, setMangaDetailToInitial } from "../../../redux/reducers/mangaDetailSlice";
 
 function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>) {
     const { mal_id } = route.params
     const lightTheme = useLightAppTheme();
-    const [mangaDetail, setMangaDetail] = useState<MangaDetailScreenStateType>();
+    const mangaDetail = useAppSelector(selectMangaDetail);
+    const dispatch = useAppDispatch();
     const [isFavorited, setIsFavorited] = useState<boolean>(false);
     const [toggle, setToggle] = useState<boolean>(true);
 
@@ -19,6 +22,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
         const value = { mal_id, images, title, genreList, published, members, score };
         const data = await getManga();
         console.log('STORAGE', JSON.stringify(data, null, 4));
+
         if (isFavorited) {
             const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
             storeManga(valueAfterDelete);
@@ -32,32 +36,25 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
     };
 
     useEffect(() => {
-        async function fetchMangaDetail() {
-            try {
-                const result = await fetch(`https://api.jikan.moe/v4/manga/${mal_id}/full`);
-                const parseResult = await result.json();
-                const { title, genres, score, images, rank, popularity, members, favorites, type, status, volumes, chapters, synopsis, title_english, published, authors, serializations } = parseResult?.data;
-                const genreList = genres.map(({ name }: { name: string }) => name);
-                const authorList = authors.map(({ name }: { name: string }) => name);
-                const serializationList = serializations.map(({ name }: { name: string }) => name);
+        dispatch(mangaDetailAsync(mal_id));
 
-                // console.log('MANGA DETAIL', JSON.stringify(parseResult?.data, null, 4));
+        async function isMangaFavorited() {
+          const getMangaFavoriteList = await getManga();
+          const getList = getMangaFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
+          const isExist = getList[0]?.mal_id ? true : false;
+          console.log('getMangaFavoriteList: ', JSON.stringify(getMangaFavoriteList, null, 3));
+          console.log('getList: ', JSON.stringify(getList, null, 3));
+          console.log('is EXIST: ', isExist);
+          setIsFavorited(isExist);
+        };
 
-                setMangaDetail({ title, genreList, score, images, rank, popularity, members, favorites, type, status, volumes, chapters, synopsis, title_english, published, authorList, serializationList });
-                const getMangaFavoriteList = await getManga();
-                const getList = getMangaFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
-                const isExist = getList[0]?.mal_id ? true : false;
-                console.log('getMangaFavoriteList: ', JSON.stringify(getMangaFavoriteList, null, 3));
-                console.log('getList: ', JSON.stringify(getList, null, 3));
-                console.log('is EXIST: ', isExist);
-                setIsFavorited(isExist);
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
+        isMangaFavorited();
+
+        return () => {
+          dispatch(setMangaDetailToInitial());
         }
 
-        fetchMangaDetail()
-    }, [])
+    }, [dispatch]);
 
     return (
         <ScrollView style={styles.scroll}>
@@ -65,7 +62,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
                 <View>
                     <Text style={styles.titleText(lightTheme.textSolidPrimaryColor)} >{mangaDetail?.title}</Text>
                     <Gap height={5} />
-                    <Text style={styles.genresText(lightTheme.textSolidPrimaryColor)}>{mangaDetail?.genreList.join(', ')}</Text>
+                    <Text style={styles.genresText(lightTheme.textSolidPrimaryColor)}>{mangaDetail?.genreList?.join(', ')}</Text>
                     <Gap height={5} />
                     <View style={styles.scoreContainer}>
                         <SolidMaterialIcons name='star' color='#FFC702' sizes={20} boxHeight={24} />
@@ -79,7 +76,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
             </View>
             <Gap height={30} />
             <View style={styles.imageContainer}>
-                <Image source={{ uri: mangaDetail?.images.webp.large_image_url }} style={styles.image} />
+                <Image source={{ uri: mangaDetail?.images?.webp.large_image_url }} style={styles.image} />
             </View>
             <Gap height={30} />
             <View style={styles.container2}>
@@ -136,12 +133,12 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
                 <View>
                     <View>
                         <Text style={styles.publishedLabel(lightTheme.textSolidPrimaryColor)}>Published</Text>
-                        <Text style={styles.publishedText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{mangaDetail?.published.string ?? 'Unknown'}</Text>
+                        <Text style={styles.publishedText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{mangaDetail?.published?.string ?? 'Unknown'}</Text>
                     </View>
                     <Gap height={20} />
                     <View>
                         <Text style={styles.serializationLabel(lightTheme.textSolidPrimaryColor)}>Serialization</Text>
-                        <Text style={styles.serializationText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{mangaDetail?.serializationList.join(', ') !== '' ? mangaDetail?.serializationList.join(', ') : 'Unknown'}</Text>
+                        <Text style={styles.serializationText(lightTheme.textSolidPrimaryColor)} numberOfLines={3}>{mangaDetail?.serializationList?.join(', ') !== '' ? mangaDetail?.serializationList?.join(', ') : 'Unknown'}</Text>
                     </View>
                 </View>
 
@@ -150,7 +147,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
                 <View>
                     <View>
                         <Text style={styles.authorsLabel(lightTheme.textSolidPrimaryColor)}>Authors</Text>
-                        <Text style={styles.authorsText(lightTheme.textSolidPrimaryColor)} numberOfLines={4}>{mangaDetail?.authorList.join(', ') !== '' ? mangaDetail?.authorList.join(', ') : 'Unknown'}</Text>
+                        <Text style={styles.authorsText(lightTheme.textSolidPrimaryColor)} numberOfLines={4}>{mangaDetail?.authorList?.join(', ') !== '' ? mangaDetail?.authorList?.join(', ') : 'Unknown'}</Text>
                     </View>
                 </View>
 
@@ -176,6 +173,7 @@ const styles = StyleSheet.create<any>({
       color: color
     }),
     genresText: (color: string) => ({
+      width: 235,
       fontSize: 12,
       fontFamily: 'poppins-regular',
       color: color

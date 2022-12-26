@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { getAnime } from '../../../../utils/storage';
 import Gap from '../../../../components/atoms/Gap';
 import { SeasonalOrFavoriteOfList } from '../../../../components';
 import { RootFavoritesTopTabScreenProps } from '../../../../navigation/type';
-import { AnimeFavoritesListScreenStateType } from './type';
+import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
+import { selectAnimeFavoriteList, animeFavoriteListAsync } from '../../../../redux/reducers/animeFavoriteListSlice';
 
 function AnimeFavoritesListScreen({ navigation }: RootFavoritesTopTabScreenProps<'Anime'>) {
-    const [animeFavoriteList, setAnimeFavoriteList] = useState<AnimeFavoritesListScreenStateType[]>([]);
+    const animeFavoriteList = useAppSelector(selectAnimeFavoriteList);
+    let dispatch: any = useAppDispatch();
     console.log('check inifinite loop')
   
     useFocusEffect(() => {
-      let getAnimeFavoriteList: any = async () => {
-        try {
-          const getAnimeFavorites = await getAnime();
-          setAnimeFavoriteList(getAnimeFavorites)
-        } catch {
-          alert('Koneksi Jaringan Lambat')
-        }
-      }
-      getAnimeFavoriteList()
-  
+      dispatch(animeFavoriteListAsync());
+      
       return () => {
-        getAnimeFavoriteList = null;
+        dispatch = null;
       }
     });
   

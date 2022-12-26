@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export type ThemesType = {
     type: 'anime' | 'manga';
+    themeList: ThemesStateType | [];
     navigation: CompositeNavigationProp<
         BottomTabNavigationProp<RootBottomTabParamList, 'Anime' | 'Manga', undefined>,
         NativeStackNavigationProp<RootStackParamList, 'Root', undefined>

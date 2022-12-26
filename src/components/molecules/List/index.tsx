@@ -5,47 +5,39 @@ import Item from '../Item';
 import Gap from '../../atoms/Gap';
 import { SolidMaterialIcons } from '../../atoms';
 import { useLightAppTheme } from '../../../themes';
-import { ListType, ListStateType } from './type';
+import { ListType } from './type';
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
+import { selectList, listAsync, setListToInitial } from '../../../redux/reducers/listSlice';
 
 function List({ types, id, navigation }: ListType) {
     const lightTheme = useLightAppTheme()
-    const [animeList, setAnimeList] = useState<ListStateType[]>([]);
+    const animeList = useAppSelector(selectList);
+    const dispatch = useAppDispatch()
     const [text, setText] = useState('1');
-    const [limitPage, setLimitPage] = useState(5);
     console.log('check infinite loop')
 
     useEffect(() => {
-        async function fetchTopAnime() {
-            try {
-                const result = await fetch(`https://api.jikan.moe/v4/${types}?genres=${id}&page=${text}`);
-                const parseResult = await result.json();
-                const animeList = parseResult?.data?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }: { mal_id: number, images: any, title: string, type: string, episodes: number, volumes: number, aired: any, published: any, members: number, score: number }) => ({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }));
-                const limit = parseResult?.pagination.last_visible_page;
-                // console.log('Anime List', JSON.stringify(topAnimeList, null, 4));
+        dispatch(listAsync({ types, id, text }));
 
-                setAnimeList(animeList);
-                setLimitPage(limit);
-            } catch {
-                alert('Koneksi Jaringan Lambat')
-            }
+        return () => {
+            dispatch(setListToInitial());
         }
-
-        fetchTopAnime();
-    }, [text, limitPage])
+    }, [dispatch, text, animeList.limit])
 
     const isFirst = () => {
         return text === '1' ? true : false;
     }
 
     const isLimited = () => {
-        return text === limitPage.toString() ? true : false;
+        return text === animeList.limit.toString() ? true : false;
     }
 
     const onChangeText = (text: string) => {
         const strToNumber = Number(text);
         let numberToStr;
-        if (strToNumber > limitPage) {
-            setText((limitPage).toString());
+        
+        if (strToNumber > animeList.limit) {
+            setText((animeList.limit).toString());
         } else if (strToNumber <= 0 || Number.isNaN(strToNumber)) {
             setText('1');
         } else {
@@ -72,29 +64,31 @@ function List({ types, id, navigation }: ListType) {
 
     return (
         <View>
-            {animeList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
+            {animeList.value?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
                 <View key={index} >
                     <Item types={types} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
                 </View>
             ))}
-            <View style={styles.pagination} >
-                <SolidMaterialIcons name='keyboard-arrow-left' color={isFirst() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor } sizes={34} boxHeight={34} onPress={onDecrement} isDisabled={isFirst()} />
+
+            <View style={styles.pagination(animeList.value?.length)} >
+                <SolidMaterialIcons name='keyboard-arrow-left' color={isFirst() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor} sizes={34} boxHeight={34} onPress={onDecrement} isDisabled={isFirst()} />
                 <TextInput mode='outlined' textColor={lightTheme.textSolidPrimaryColor} outlineColor={lightTheme.textSolidPrimaryColor} style={styles.textInput} value={text} onChangeText={onChangeText} />
-                <SolidMaterialIcons name='keyboard-arrow-right' color={isLimited() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor } sizes={34} boxHeight={34} onPress={onIncrement} isDisabled={isLimited()} />
+                <SolidMaterialIcons name='keyboard-arrow-right' color={isLimited() ? lightTheme.iconSolidSecondaryColor : lightTheme.iconSolidPrimaryColor} sizes={34} boxHeight={34} onPress={onIncrement} isDisabled={isLimited()} />
             </View>
             <Gap height={25} />
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    pagination: {
+const styles = StyleSheet.create<any>({
+    pagination: (length: number) => ({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginHorizontal: 24
-    },
+        marginHorizontal: 24,
+        display: length !== 0 ? 'flex' : 'none'
+    }),
     textInput: {
         alignSelf: 'flex-start',
         height: 28,
