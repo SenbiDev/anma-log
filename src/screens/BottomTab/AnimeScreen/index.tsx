@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { ScrollView, RefreshControl, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
@@ -32,25 +32,55 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
         setTimeout(() => dispatch(topThreeAnimeListAsync()), 3500);
     }, [dispatch])
 
+    function isLoading() {
+        return recommendedList.status === 'loading' ||
+            genreList.status === 'loading' ||
+            themeList.status === 'loading' ||
+            demographicList.status === 'loading' ||
+            topThreeList.status === 'loading'
+    }
+
+    function wait() {
+        setTimeout(() => dispatch(recommendedAnimeListAsync()), 500);
+        setTimeout(() => dispatch(animeGenreListAsync()), 1000);
+        setTimeout(() => dispatch(animeThemeListAsync()), 1500);
+        setTimeout(() => dispatch(animeDemographicListAsync()), 3000);
+        setTimeout(() => dispatch(topThreeAnimeListAsync()), 3500);
+    }
+
+    const onRefresh = React.useCallback(() => {
+        wait();
+    }, []);
+
+    console.log('Anime IS LOADING:', isLoading());
+
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    progressViewOffset={24}
+                    refreshing={isLoading()}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
             <View style={styles.container}>
                 {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <GradientText style={styles.recommendedGradientText} >Recommended Anime</GradientText>
                 <Gap height={15} />
-                <RecommendedList type='anime' recommendedList={recommendedList} navigation={navigation} />
+                <RecommendedList type='anime' recommendedList={recommendedList.value} navigation={navigation} />
                 <Gap height={50} />
                 <GradientText style={styles.genresGradientText} >Genres</GradientText>
                 <Gap height={12} />
-                <Genres type='anime' genreList={genreList} navigation={navigation} />
+                <Genres type='anime' genreList={genreList.value} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.themesGradientText} >Themes</GradientText>
                 <Gap height={12} />
-                <Themes type='anime' themeList={themeList} navigation={navigation} />
+                <Themes type='anime' themeList={themeList.value} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.demographicsGradientText} >Demographics</GradientText>
                 <Gap height={12} />
-                <Demographics type='anime' demographicList={demographicList} navigation={navigation} />
+                <Demographics type='anime' demographicList={demographicList.value} navigation={navigation} />
                 <Gap height={50} />
 
                 <View style={styles.row}>
@@ -60,7 +90,7 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
-                <TopThree types='anime' topThreeList={topThreeList} navigation={navigation} />
+                <TopThree types='anime' topThreeList={topThreeList.value} navigation={navigation} />
             </View>
         </ScrollView>
     )

@@ -40,6 +40,6 @@ const mangaThemeListSlice = createSlice({
   },
 });
 
-export const selectMangaThemeList = (state: RootState) => state.mangaThemeList.value;
+export const selectMangaThemeList = (state: RootState) => state.mangaThemeList;
 
 export default mangaThemeListSlice.reducer;

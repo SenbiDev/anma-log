@@ -3,7 +3,7 @@ import { RootSeasonalTopTabParamList, RootStackParamList } from "../../../naviga
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs";
 
-export type SeasonalOrFavoriteOfListType = {
+export type FavoriteListType = {
     type: 'anime' | 'manga';
     list: {
         mal_id: number,

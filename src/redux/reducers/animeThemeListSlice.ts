@@ -40,6 +40,6 @@ const animeThemeListSlice = createSlice({
   },
 });
 
-export const selectAnimeThemeList = (state: RootState) => state.animeThemeList.value;
+export const selectAnimeThemeList = (state: RootState) => state.animeThemeList;
 
 export default animeThemeListSlice.reducer;

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { ScrollView, RefreshControl, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
@@ -32,25 +32,55 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
         setTimeout(() => dispatch(topThreeMangaListAsync()), 3500);
     }, [dispatch])
 
+    function isLoading() {
+        return recommendedList.status === 'loading' ||
+            genreList.status === 'loading' ||
+            themeList.status === 'loading' ||
+            demographicList.status === 'loading' ||
+            topThreeList.status === 'loading'
+    }
+
+    function wait() {
+        setTimeout(() => dispatch(recommendedMangaListAsync()), 500);
+        setTimeout(() => dispatch(mangaGenreListAsync()), 1000);
+        setTimeout(() => dispatch(mangaThemeListAsync()), 1500);
+        setTimeout(() => dispatch(mangaDemographicListAsync()), 3000);
+        setTimeout(() => dispatch(topThreeMangaListAsync()), 3500);
+    }
+
+    const onRefresh = React.useCallback(() => {
+        wait();
+    }, []);
+
+    console.log('Manga IS LOADING:', isLoading());
+
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    progressViewOffset={24}
+                    refreshing={isLoading()}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
             <View style={styles.container}>
                 {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <GradientText style={styles.recommendedGradientText} >Recommended Manga</GradientText>
                 <Gap height={15} />
-                <RecommendedList type='manga' recommendedList={recommendedList} navigation={navigation} />
+                <RecommendedList type='manga' recommendedList={recommendedList.value} navigation={navigation} />
                 <Gap height={50} />
                 <GradientText style={styles.genresGradientText} >Genres</GradientText>
                 <Gap height={12} />
-                <Genres type='manga' genreList={genreList} navigation={navigation} />
+                <Genres type='manga' genreList={genreList.value} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.themesGradientText} >Themes</GradientText>
                 <Gap height={12} />
-                <Themes type='manga' themeList={themeList} navigation={navigation} />
+                <Themes type='manga' themeList={themeList.value} navigation={navigation} />
                 <Gap height={15} />
                 <GradientText style={styles.demographicsGradientText} >Demographics</GradientText>
                 <Gap height={12} />
-                <Demographics type='manga' demographicList={demographicList} navigation={navigation} />
+                <Demographics type='manga' demographicList={demographicList.value} navigation={navigation} />
                 <Gap height={50} />
 
                 <View style={styles.row}>
@@ -60,7 +90,7 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
-                <TopThree types='manga' topThreeList={topThreeList} navigation={navigation} />
+                <TopThree types='manga' topThreeList={topThreeList.value} navigation={navigation} />
             </View>
         </ScrollView>
     )

@@ -34,8 +34,8 @@ const nowSeasonalListSlice = createSlice({
       })
       .addCase(nowSeasonalListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value = action.payload.value;
-        state.seasonalName = action.payload.seasonalName;
+        state.value = action.payload!!.value;
+        state.seasonalName = action.payload!!.seasonalName;
       })
       .addCase(nowSeasonalListAsync.rejected, (state) => {
         state.status = 'failed';

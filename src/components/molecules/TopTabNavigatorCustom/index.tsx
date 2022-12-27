@@ -52,7 +52,6 @@ function TopTabNavigatorCustom({ state, descriptors, navigation }: MaterialTopTa
                             {isFocused ? <GradientText style={styles.gradientText} >{(label as string)}</GradientText> :
                                 <Text style={styles.solidText(lightTheme.textSolidPrimaryColor)} >{(label as string)}</Text>}
                             <LinearGradient
-                                // Background Linear Gradient
                                 start={{ x: 0.3, y: 0.1 }}
                                 end={{ x: 1, y: 1 }}
                                 colors={['rgba(0, 216, 203, 1)', 'rgba(0, 102, 255, 1)']}

@@ -10,7 +10,7 @@ export type CardType = {
     title: string;
     genres: string[];
     aired?: any;
-    published: any;
+    published?: any;
     members: number;
     score: number;
     navigation:  

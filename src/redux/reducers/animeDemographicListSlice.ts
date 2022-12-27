@@ -40,6 +40,6 @@ const animeDemographicListSlice = createSlice({
   },
 });
 
-export const selectAnimeDemographicList = (state: RootState) => state.animeDemographicList.value;
+export const selectAnimeDemographicList = (state: RootState) => state.animeDemographicList;
 
 export default animeDemographicListSlice.reducer;

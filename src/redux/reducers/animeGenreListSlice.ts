@@ -40,6 +40,6 @@ const animeGenreListSlice = createSlice({
   },
 });
 
-export const selectAnimeGenreList = (state: RootState) => state.animeGenreList.value;
+export const selectAnimeGenreList = (state: RootState) => state.animeGenreList;
 
 export default animeGenreListSlice.reducer;

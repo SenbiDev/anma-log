@@ -32,7 +32,7 @@ const recommendedAnimeListSlice = createSlice({
       })
       .addCase(recommendedAnimeListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value = action.payload;
+        state.value = action.payload!!;
       })
       .addCase(recommendedAnimeListAsync.rejected, (state) => {
         state.status = 'failed';
@@ -40,6 +40,6 @@ const recommendedAnimeListSlice = createSlice({
   },
 });
 
-export const selectRecommendedList = (state: RootState) => state.recommendedAnimeList.value;
+export const selectRecommendedList = (state: RootState) => state.recommendedAnimeList;
 
 export default recommendedAnimeListSlice.reducer;

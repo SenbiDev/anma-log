@@ -8,7 +8,7 @@ import Item from "./Item";
 import List from "./List";
 import RecommendedList from "./RecommendedList";
 import SearchResult from "./SearchResult";
-import SeasonalOrFavoriteOfList from "./SeasonalOrFavoriteOfList";
+import FavoriteList from "./FavoriteList";
 import Themes from "./Themes";
 import TopList from "./TopList";
 import TopTabNavigatorCustom from "./TopTabNavigatorCustom";
@@ -25,7 +25,7 @@ export {
     List,
     RecommendedList,
     SearchResult,
-    SeasonalOrFavoriteOfList,
+    FavoriteList,
     Themes,
     TopList,
     TopTabNavigatorCustom,

@@ -57,6 +57,6 @@ const mangaDetailSlice = createSlice({
   },
 });
 
-export const selectMangaDetail = (state: RootState) => state.mangaDetail.value;
+export const selectMangaDetail = (state: RootState) => state.mangaDetail;
 
 export default mangaDetailSlice.reducer;

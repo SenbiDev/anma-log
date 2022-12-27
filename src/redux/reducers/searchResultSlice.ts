@@ -40,6 +40,6 @@ const searchResultSlice = createSlice({
   },
 });
 
-export const selectSearchResult = (state: RootState) => state.searchResult.value;
+export const selectSearchResult = (state: RootState) => state.searchResult;
 
 export default searchResultSlice.reducer;

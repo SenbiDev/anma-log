@@ -40,6 +40,6 @@ const mangaDemographicListSlice = createSlice({
   },
 });
 
-export const selectMangaDemographicList = (state: RootState) => state.mangaDemographicList.value;
+export const selectMangaDemographicList = (state: RootState) => state.mangaDemographicList;
 
 export default mangaDemographicListSlice.reducer;

@@ -40,6 +40,6 @@ const topThreeMangaListSlice = createSlice({
   },
 });
 
-export const selectTopThreeMangaList = (state: RootState) => state.topThreeMangaList.value;
+export const selectTopThreeMangaList = (state: RootState) => state.topThreeMangaList;
 
 export default topThreeMangaListSlice.reducer;

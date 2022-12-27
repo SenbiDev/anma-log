@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View } from 'react-native';
+import { View, ScrollView, RefreshControl } from 'react-native';
 import Item from '../Item';
 import Gap from '../../atoms/Gap';
 import { TopListType } from './type';
@@ -18,15 +18,39 @@ function TopList({ types, navigation }: TopListType) {
         }
     }, [dispatch])
 
+    function isLoading() {
+        return topList.status === 'loading'
+    }
+
+    function wait() {
+        setTimeout(() => dispatch(topListAsync(types)), 1000);
+    }
+
+    const onRefresh = React.useCallback(() => {
+        wait();
+    }, []);
+
+    console.log('top list IS LOADING:', isLoading());
+
+
     return (
-        <>
-            {topList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    progressViewOffset={-34}
+                    refreshing={isLoading()}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
+            {topList.value?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
                 <View key={index}>
                     <Item types={types} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
                 </View>
             ))}
-        </>
+            <Gap height={34} />
+        </ScrollView>
     )
 }
 

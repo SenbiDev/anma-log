@@ -40,6 +40,6 @@ const topThreeAnimeListSlice = createSlice({
   },
 });
 
-export const selectTopThreeAnimeList = (state: RootState) => state.topThreeAnimeList.value;
+export const selectTopThreeAnimeList = (state: RootState) => state.topThreeAnimeList;
 
 export default topThreeAnimeListSlice.reducer;

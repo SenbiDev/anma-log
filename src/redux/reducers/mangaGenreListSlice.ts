@@ -40,6 +40,6 @@ const mangaGenreListSlice = createSlice({
   },
 });
 
-export const selectMangaGenreList = (state: RootState) => state.mangaGenreList.value;
+export const selectMangaGenreList = (state: RootState) => state.mangaGenreList;
 
 export default mangaGenreListSlice.reducer;

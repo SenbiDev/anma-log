@@ -40,6 +40,6 @@ const archiveListSlice = createSlice({
   },
 });
 
-export const selectArchiveList = (state: RootState) => state.archiveList.value;
+export const selectArchiveList = (state: RootState) => state.archiveList;
 
 export default archiveListSlice.reducer;

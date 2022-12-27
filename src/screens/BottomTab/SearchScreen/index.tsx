@@ -4,6 +4,7 @@ import Gap from '../../../components/atoms/Gap';
 import Accordion from "../../../components/atoms/Accordion";
 import TextInput from "../../../components/atoms/TextInput";
 import { SearchResult } from "../../../components";
+import { GradientText } from "../../../components";
 import { RootBottomTabScreenProps } from '../../../navigation/type';
 
 function SearchScreen({ navigation }: RootBottomTabScreenProps<'Search'>) {
@@ -32,8 +33,8 @@ function SearchScreen({ navigation }: RootBottomTabScreenProps<'Search'>) {
                 />
             </View>
             <Gap height={30} />
-            {/* <GradientText style={{ fontSize: 14, marginLeft: 24, fontWeight: '600' }} >Result</GradientText>
-        <Gap height={20} /> */}
+            <GradientText style={styles.gradientText} >Result</GradientText>
+            <Gap height={20} />
             <SearchResult types={title.toLowerCase()} letter={text} navigation={navigation} />
         </View>
     )
@@ -50,6 +51,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         marginHorizontal: 24
     },
+    gradientText: {
+        fontSize: 14,
+        marginLeft: 24
+    }
 });
 
 export default SearchScreen;

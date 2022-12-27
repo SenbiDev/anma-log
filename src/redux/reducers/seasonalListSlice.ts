@@ -39,7 +39,7 @@ const seasonalListSlice = createSlice({
       })
       .addCase(seasonalListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value = action.payload;
+        state.value = action.payload!!;
       })
       .addCase(seasonalListAsync.rejected, (state) => {
         state.status = 'failed';
@@ -57,6 +57,6 @@ const seasonalListSlice = createSlice({
   },
 });
 
-export const selectSeasonalList = (state: RootState) => state.seasonalList.value;
+export const selectSeasonalList = (state: RootState) => state.seasonalList;
 
 export default seasonalListSlice.reducer;

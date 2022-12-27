@@ -44,19 +44,13 @@ const topListSlice = createSlice({
       .addCase(topListAsync.rejected, (state) => {
         state.status = 'failed';
       })
-      .addCase(setTopListToInitial.pending, (state) => {
-        state.status = 'loading';
-      })
       .addCase(setTopListToInitial.fulfilled, (state, action) => {
         state.status = 'idle';
         state.value = action.payload;
-      })
-      .addCase(setTopListToInitial.rejected, (state) => {
-        state.status = 'failed';
       });
   },
 });
 
-export const selectTopList = (state: RootState) => state.topList.value;
+export const selectTopList = (state: RootState) => state.topList;
 
 export default topListSlice.reducer;

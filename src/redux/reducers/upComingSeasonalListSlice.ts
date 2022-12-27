@@ -34,8 +34,8 @@ const upComingSeasonalListSlice = createSlice({
       })
       .addCase(upComingSeasonalListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value = action.payload.value;
-        state.seasonalName = action.payload.seasonalName;
+        state.value = action.payload!!.value;
+        state.seasonalName = action.payload!!.seasonalName;
       })
       .addCase(upComingSeasonalListAsync.rejected, (state) => {
         state.status = 'failed';

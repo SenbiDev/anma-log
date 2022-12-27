@@ -57,6 +57,6 @@ const animeDetailSlice = createSlice({
   },
 });
 
-export const selectAnimeDetail = (state: RootState) => state.animeDetail.value;
+export const selectAnimeDetail = (state: RootState) => state.animeDetail;
 
 export default animeDetailSlice.reducer;
