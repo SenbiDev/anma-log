@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { GradientBackground, Gap } from '../../atoms';
 import { ArchiveListType } from './type';
@@ -8,11 +8,10 @@ import { selectArchiveList, archiveListAsync } from '../../../redux/reducers/arc
 function ArchiveList({ navigation }: ArchiveListType) {
     const archives = useAppSelector(selectArchiveList);
     const dispatch = useAppDispatch();
+    const [waiting, setWaiting] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => {
-            dispatch(archiveListAsync());
-        }, 1500)
+        setTimeout(() => dispatch(archiveListAsync()), 1500)
     }, [dispatch]);
 
     function isLoading() {
@@ -23,12 +22,12 @@ function ArchiveList({ navigation }: ArchiveListType) {
         setTimeout(() => dispatch(archiveListAsync()), 1500);
     }
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = useCallback(() => {
+        setWaiting(true);
         wait();
     }, []);
 
     console.log('archive list IS LOADING:', isLoading());
-
     return (
         <ScrollView
             showsVerticalScrollIndicator={false}
@@ -98,6 +97,13 @@ function ArchiveList({ navigation }: ArchiveListType) {
                     <Gap height={15} />
                 </View>
             ))}
+            {(archives.value?.length === 0 || archives.value === undefined)  &&
+                <View style={{ alignItems: 'center' }}>
+                    <GradientBackground paddingHorizontal={25} paddingVertical={10} onPress={onRefresh}>
+                        <Text style={styles.text}>{waiting ? 'Waiting...' : 'Refresh'}</Text>
+                    </GradientBackground>
+                </View>
+            }
         </ScrollView>
     )
 }

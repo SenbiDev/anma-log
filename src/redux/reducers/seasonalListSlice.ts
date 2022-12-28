@@ -44,15 +44,9 @@ const seasonalListSlice = createSlice({
       .addCase(seasonalListAsync.rejected, (state) => {
         state.status = 'failed';
       })
-      .addCase(setSeasonalListToInitial.pending, (state) => {
-        state.status = 'loading';
-      })
       .addCase(setSeasonalListToInitial.fulfilled, (state, action) => {
         state.status = 'idle';
         state.value = action.payload;
-      })
-      .addCase(setSeasonalListToInitial.rejected, (state) => {
-        state.status = 'failed';
       });
   },
 });

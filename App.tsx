@@ -8,10 +8,12 @@ import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
 import { lightTheme, darkTheme } from './src/themes';
 import { store } from './src/redux/store';
+import { LogBox } from 'react-native';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  LogBox.ignoreAllLogs()
 
   if (!isLoadingComplete) {
     return (

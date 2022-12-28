@@ -47,7 +47,7 @@ function SearchResult({ types, letter, navigation }: SearchResultType) {
                     <Gap height={15} />
                 </View>
             ))}
-            {searchlist.value?.length === 0 &&
+            {searchlist.value?.length === 0 ||
                 <View style={styles.textContainer}>
                     <Text style={styles.text(lightTheme.textSolidPrimaryColor)} >Not Found</Text>
                 </View>
