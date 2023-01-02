@@ -4,6 +4,7 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
+  SplashScreen: undefined;
   Root: NavigatorScreenParams<RootBottomTabParamList> | undefined;
   ListScreen: { type: 'anime' | 'manga', mal_id: number };
   TopListScreen: { types: 'anime' | 'manga' };

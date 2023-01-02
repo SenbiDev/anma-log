@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import { GradientBackground, Gap } from '../../atoms';
+import React from 'react'
+import { View, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native'
+import { Gap } from '../../atoms';
 import { ThemesType } from './type';
 
 function Themes({type, themeList, navigation}: ThemesType) {
@@ -9,17 +9,17 @@ function Themes({type, themeList, navigation}: ThemesType) {
             {themeList?.map((theme, index) => (
                 <View key={index} style={styles.buttonsColumn}>
                     <View>
-                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[0].mal_id })} >
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[0].mal_id })} >
                             <Text style={styles.text}>
                                 {theme[0].name}
                             </Text>
-                        </GradientBackground>
+                        </TouchableOpacity>
                         <Gap height={10} />
-                        <GradientBackground paddingHorizontal={18} paddingVertical={7} width='100%' alignItems='center' onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[1].mal_id })} >
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListScreen', { type, mal_id: theme[1].mal_id })} >
                             <Text style={styles.text}>
                                 {theme[1].name}
                             </Text>
-                        </GradientBackground>
+                        </TouchableOpacity>
                     </View>
                     <Gap width={10} />
                 </View>
@@ -40,6 +40,15 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 10,
         fontFamily: 'poppins-semiBold',
+    },
+    button: {
+        alignSelf: 'flex-start',
+        borderRadius: 3,
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        backgroundColor: 'rgba(0, 102, 255, 1)',
+        width: '100%',
+        alignItems: 'center'
     },
 })
 

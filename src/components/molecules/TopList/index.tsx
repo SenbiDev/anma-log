@@ -30,9 +30,6 @@ function TopList({ types, navigation }: TopListType) {
         wait();
     }, []);
 
-    console.log('top list IS LOADING:', isLoading());
-
-
     return (
         <ScrollView
             refreshControl={

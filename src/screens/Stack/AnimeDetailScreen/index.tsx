@@ -16,6 +16,9 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
   const dispatch = useAppDispatch();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(true);
+  const US = Intl.NumberFormat("en-US", {
+    currency: "USD",
+  });
 
   useEffect(() => {
     dispatch(animeDetailAsync(mal_id));
@@ -24,9 +27,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
       const getAnimeFavoriteList = await getAnime();
       const getList = getAnimeFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
       const isExist = getList[0]?.mal_id ? true : false;
-      console.log('getAnimeFavoriteList: ', JSON.stringify(getAnimeFavoriteList, null, 3));
-      console.log('getList: ', JSON.stringify(getList, null, 3));
-      console.log('is EXIST: ', isExist);
+
       setIsFavorited(isExist);
     };
 
@@ -42,7 +43,6 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
 
     const value = { mal_id, images, title, genreList, aired, members, score };
     const data = await getAnime();
-    console.log('STORAGE', JSON.stringify(data, null, 4));
 
     if (isFavorited) {
       const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
@@ -67,8 +67,6 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
   const onRefresh = React.useCallback(() => {
     wait();
   }, []);
-
-  console.log('Anime Detail IS LOADING:', isLoading());
 
   return (
     <ScrollView
@@ -115,12 +113,12 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
 
         <View style={styles.textContainer}>
           <Text style={styles.membersLabel(lightTheme.textSolidPrimaryColor)}>Members</Text>
-          <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>{animeDetail.value?.members ?? 'Unknown'}</Text>
+          <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>{US.format(animeDetail.value?.members!!) ?? 'Unknown'}</Text>
         </View>
 
         <View style={styles.textContainer}>
           <Text style={styles.favoritesLabel(lightTheme.textSolidPrimaryColor)}>Favorites</Text>
-          <Text style={styles.favoritesText(lightTheme.textSolidPrimaryColor)}>{animeDetail.value?.favorites ?? 'Unknown'}</Text>
+          <Text style={styles.favoritesText(lightTheme.textSolidPrimaryColor)}>{US.format(animeDetail.value?.favorites!!) ?? 'Unknown'}</Text>
         </View>
       </View>
       <Gap height={30} />
@@ -366,7 +364,7 @@ const styles = StyleSheet.create<any>({
     fontSize: 12,
     fontFamily: 'poppins-regular',
     color: color,
-    width: 43
+    width: 53
   }),
   seasonLabel: (color: string) => ({
     fontSize: 12,

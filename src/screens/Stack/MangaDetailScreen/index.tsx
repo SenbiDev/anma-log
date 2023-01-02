@@ -16,6 +16,9 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
   const dispatch = useAppDispatch();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(true);
+  const US = Intl.NumberFormat("en-US", {
+    currency: "USD",
+  });
 
   useEffect(() => {
     dispatch(mangaDetailAsync(mal_id));
@@ -24,9 +27,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
       const getMangaFavoriteList = await getManga();
       const getList = getMangaFavoriteList?.filter((list: { mal_id: number, images: any, title?: string, genres?: string[], aired: any, members?: number, score?: number }) => list.mal_id === mal_id)
       const isExist = getList[0]?.mal_id ? true : false;
-      console.log('getMangaFavoriteList: ', JSON.stringify(getMangaFavoriteList, null, 3));
-      console.log('getList: ', JSON.stringify(getList, null, 3));
-      console.log('is EXIST: ', isExist);
+
       setIsFavorited(isExist);
     };
 
@@ -43,7 +44,6 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
 
     const value = { mal_id, images, title, genreList, published, members, score };
     const data = await getManga();
-    console.log('STORAGE', JSON.stringify(data, null, 4));
 
     if (isFavorited) {
       const valueAfterDelete = data?.filter(({ mal_id }: { mal_id: number }) => mal_id !== value.mal_id);
@@ -68,8 +68,6 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
   const onRefresh = React.useCallback(() => {
     wait();
   }, []);
-
-  console.log('Manga Detail IS LOADING:', isLoading());
 
   return (
     <ScrollView
@@ -116,12 +114,12 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
 
         <View style={styles.textContainer}>
           <Text style={styles.membersLabel(lightTheme.textSolidPrimaryColor)}>Members</Text>
-          <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>{mangaDetail.value?.members ?? 'Unknown'}</Text>
+          <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>{US.format(mangaDetail.value?.members!!) ?? 'Unknown'}</Text>
         </View>
 
         <View style={styles.textContainer}>
           <Text style={styles.favoritesLabel(lightTheme.textSolidPrimaryColor)}>Favorites</Text>
-          <Text style={styles.favoritesText(lightTheme.textSolidPrimaryColor)}>{mangaDetail.value?.favorites ?? 'Unknown'}</Text>
+          <Text style={styles.favoritesText(lightTheme.textSolidPrimaryColor)}>{US.format(mangaDetail.value?.favorites!!) ?? 'Unknown'}</Text>
         </View>
       </View>
       <Gap height={30} />

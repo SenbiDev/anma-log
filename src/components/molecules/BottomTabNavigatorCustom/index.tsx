@@ -62,5 +62,9 @@ const BottomTabNavigatorCustom = ({state, descriptors, navigation}: BottomTabBar
       paddingVertical: 13,
       height: 67,
       backgroundColor: color,
+      elevation: 10,
+      shadowOffset: { width: 0, height: 7 },
+      shadowColor: 'black',
+      shadowOpacity: 1,
     }),
   });

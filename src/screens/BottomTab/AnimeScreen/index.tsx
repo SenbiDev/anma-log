@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ScrollView, RefreshControl, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
-import { GradientText } from '../../../components';
 import Gap from '../../../components/atoms/Gap';
 import { RecommendedList, Genres, Themes, Demographics, TopThree } from '../../../components';
 import { RootBottomTabScreenProps } from '../../../navigation/type';
@@ -52,8 +51,6 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
         wait();
     }, []);
 
-    console.log('Anime IS LOADING:', isLoading());
-
     return (
         <ScrollView
             refreshControl={
@@ -66,25 +63,25 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
         >
             <View style={styles.container}>
                 {/* <StatusBar backgroundColor="#61dafb" /> */}
-                <GradientText style={styles.recommendedGradientText} >Recommended Anime</GradientText>
+                <Text style={styles.recommended} >Recommended Anime</Text>
                 <Gap height={15} />
                 <RecommendedList type='anime' recommendedList={recommendedList.value} navigation={navigation} />
                 <Gap height={50} />
-                <GradientText style={styles.genresGradientText} >Genres</GradientText>
+                <Text style={styles.genres} >Genres</Text>
                 <Gap height={12} />
                 <Genres type='anime' genreList={genreList.value} navigation={navigation} />
                 <Gap height={15} />
-                <GradientText style={styles.themesGradientText} >Themes</GradientText>
+                <Text style={styles.themes} >Themes</Text>
                 <Gap height={12} />
                 <Themes type='anime' themeList={themeList.value} navigation={navigation} />
                 <Gap height={15} />
-                <GradientText style={styles.demographicsGradientText} >Demographics</GradientText>
+                <Text style={styles.demographics} >Demographics</Text>
                 <Gap height={12} />
                 <Demographics type='anime' demographicList={demographicList.value} navigation={navigation} />
                 <Gap height={50} />
 
                 <View style={styles.row}>
-                    <GradientText style={styles.topGradientText} >Top Anime</GradientText>
+                    <Text style={styles.top} >Top Anime</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TopListScreen', { types: 'anime' })}>
                         <Text style={styles.moreSolidText}>more</Text>
                     </TouchableOpacity>
@@ -101,22 +98,29 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: StatusBar.currentHeight || 0,
     },
-    recommendedGradientText: {
+    recommended: {
         fontSize: 14,
+        fontFamily: 'poppins-medium',
+        color: 'rgba(0, 102, 255, 1)',
         marginTop: 24,
         marginLeft: 24,
-
     },
-    genresGradientText: {
+    genres: {
         fontSize: 14,
+        fontFamily: 'poppins-medium',
+        color: 'rgba(0, 102, 255, 1)',
         marginLeft: 24,
     },
-    themesGradientText: {
+    themes: {
         fontSize: 14,
+        fontFamily: 'poppins-medium',
+        color: 'rgba(0, 102, 255, 1)',
         marginLeft: 24,
     },
-    demographicsGradientText: {
+    demographics: {
         fontSize: 14,
+        fontFamily: 'poppins-medium',
+        color: 'rgba(0, 102, 255, 1)',
         marginLeft: 24,
     },
     row: {
@@ -126,9 +130,10 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         justifyContent: 'space-between'
     },
-    topGradientText: {
+    top: {
         fontSize: 14,
-
+        fontFamily: 'poppins-medium',
+        color: 'rgba(0, 102, 255, 1)',
     },
     moreSolidText: {
         fontSize: 12,

@@ -1,8 +1,5 @@
 import Accordion from "./Accordion";
 import Gap from "./Gap";
-import GradientBackground from "./Gradient/GradientBackground";
-import GradientMaterialIcons from "./Gradient/GradientMaterialIcons";
-import GradientText from "./Gradient/GradientText";
 import IconAnime from "./Icons/Anime/IconAnime";
 import IconAnimeActive from "./Icons/Anime/IconAnimeActive";
 import IconFavorites from "./Icons/Favorites/IconFavorites";
@@ -20,9 +17,6 @@ import TextInput from "./TextInput";
 export {
     Accordion,
     Gap,
-    GradientBackground,
-    GradientMaterialIcons,
-    GradientText,
     IconAnime,
     IconAnimeActive,
     IconFavorites,

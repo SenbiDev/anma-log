@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import Gap from '../../../components/atoms/Gap';
 import Accordion from "../../../components/atoms/Accordion";
 import TextInput from "../../../components/atoms/TextInput";
 import { SearchResult } from "../../../components";
-import { GradientText } from "../../../components";
+import { useLightAppTheme } from "../../../themes";
 import { RootBottomTabScreenProps } from '../../../navigation/type';
 
 function SearchScreen({ navigation }: RootBottomTabScreenProps<'Search'>) {
+    const ligthTheme = useLightAppTheme();
     const [title, setTitle] = useState('Anime');
     const [text, setText] = useState('');
 
@@ -33,14 +34,14 @@ function SearchScreen({ navigation }: RootBottomTabScreenProps<'Search'>) {
                 />
             </View>
             <Gap height={30} />
-            <GradientText style={styles.gradientText} >Result</GradientText>
+            <Text style={styles.text(ligthTheme.textSolidPrimaryColor)} >Result</Text>
             <Gap height={20} />
             <SearchResult types={title.toLowerCase()} letter={text} navigation={navigation} />
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
     container: {
         flex: 1,
         marginTop: StatusBar.currentHeight || 0,
@@ -51,10 +52,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         marginHorizontal: 24
     },
-    gradientText: {
+    text: (color: string) => ({
         fontSize: 14,
+        fontFamily: 'poppins-medium',
+        color: color,
         marginLeft: 24
-    }
+    })
 });
 
 export default SearchScreen;

@@ -14,7 +14,6 @@ function List({ types, id, navigation }: ListType) {
     const animeList = useAppSelector(selectList);
     const dispatch = useAppDispatch()
     const [text, setText] = useState('1');
-    console.log('check infinite loop')
 
     useEffect(() => {
         dispatch(listAsync({ types, id, text }));
@@ -72,15 +71,12 @@ function List({ types, id, navigation }: ListType) {
     }
 
     function wait(page: string) {
-        console.log('TEXT', text)
         setTimeout(() => dispatch(listAsync({ types, id, text: page })), 500);
     }
 
     const onRefresh = React.useCallback((page: string) => {
         wait(page);
     }, [text]);
-
-    console.log('list IS LOADING:', isLoading());
 
     return (
         <ScrollView

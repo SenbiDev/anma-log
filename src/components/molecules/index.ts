@@ -11,7 +11,6 @@ import SearchResult from "./SearchResult";
 import FavoriteList from "./FavoriteList";
 import Themes from "./Themes";
 import TopList from "./TopList";
-import TopTabNavigatorCustom from "./TopTabNavigatorCustom";
 import TopThree from "./TopThree";
 
 export {
@@ -28,6 +27,5 @@ export {
     FavoriteList,
     Themes,
     TopList,
-    TopTabNavigatorCustom,
     TopThree,
 }

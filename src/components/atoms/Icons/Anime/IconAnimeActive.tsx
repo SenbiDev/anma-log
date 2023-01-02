@@ -1,9 +1,9 @@
 import React from 'react'
-import GradientMaterialIcons from '../../Gradient/GradientMaterialIcons';
+import SolidMaterialIcons from '../../SolidMaterialIcons';
 
 function IconAnimeActive() {
   return (
-    <GradientMaterialIcons size={20} style={{ height: 24 }} name='animation' />
+    <SolidMaterialIcons name='animation' color={'rgba(0, 102, 255, 1)'} sizes={20} boxHeight={24} />
   )
 }
 

@@ -10,7 +10,6 @@ import { selectMangaFavoriteList, mangaFavoriteListAsync } from '../../../../red
 function MangaFavoritesListScreen({ navigation }: RootFavoritesTopTabScreenProps<'Manga'>) {
     const mangaFavoriteList = useAppSelector(selectMangaFavoriteList);
     let dispatch: any = useAppDispatch();
-    console.log('check inifinite loop')
 
     useFocusEffect(() => {
         dispatch(mangaFavoriteListAsync());

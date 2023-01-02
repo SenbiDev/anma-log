@@ -9,7 +9,6 @@ import IconSeasonal from '../Icons/Seasonal/IconSeasonal';
 import IconSeasonalActive from '../Icons/Seasonal/IconSeasonalActive';
 import IconFavorites from '../Icons/Favorites/IconFavorites';
 import IconFavoritesActive from '../Icons/Favorites/IconFavoritesActive';
-import GradientText from '../Gradient/GradientText';
 import { useLightAppTheme } from '../../../themes';
 
 const TabItem = ({title, active, onPress, onLongPress}: any) => {
@@ -38,11 +37,7 @@ const TabItem = ({title, active, onPress, onLongPress}: any) => {
       onPress={onPress}
       onLongPress={onLongPress}>
       <Icon />
-      { 
-        active
-        ? <GradientText style={styles.textGradient} >{title}</GradientText>
-        : <Text style={styles.textSolid(lightTheme.textSolidPrimaryColor)} >{title}</Text>
-      }
+      <Text style={styles.textSolid( active ? 'rgba(0, 102, 255, 1)' : lightTheme.textSolidPrimaryColor)} >{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -51,10 +46,6 @@ export default TabItem;
 
 const styles = StyleSheet.create<any>({
   container: {alignItems: 'center'},
-  textGradient: {
-    fontSize: 8,
-    paddingVertical: 5,
-  },
   textSolid: (color: string) => ({
     fontSize: 8,
     fontFamily: 'poppins-regular',

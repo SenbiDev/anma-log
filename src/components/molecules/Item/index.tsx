@@ -9,6 +9,10 @@ import { ItemType } from './type';
 function Item({ types, mal_id, images, title, type, episodes, volumes, aired, published, members, score, navigation }: ItemType) {
     const lightTheme = useLightAppTheme();
     const epsOrVols = episodes ? `(${episodes ?? 'Unknown'} eps)` : `(${volumes ?? 'Unknown'} vols)`;
+    const US = Intl.NumberFormat("en-US", {
+      currency: "USD",
+    });
+
     return (
         <Card style={styles.card(lightTheme.cardColor)}>
         <TouchableOpacity style={styles.touchable} onPress={() => navigation.navigate( types === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })}>
@@ -33,7 +37,7 @@ function Item({ types, mal_id, images, title, type, episodes, volumes, aired, pu
             </Text>
             <Gap height={5} />
             <Text style={styles.membersText(lightTheme.textSolidPrimaryColor)}>
-              {members ? `${members} members` : 'Unknown'}
+              {members ? `${US.format(members)} members` : 'Unknown'}
             </Text>
             <Gap height={5} />
 

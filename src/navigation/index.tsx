@@ -2,14 +2,12 @@ import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/b
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { StatusBar } from 'react-native';
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
+import { StatusBar, Platform } from 'react-native';
+import { useLightAppTheme } from '../themes';
 import { RootStackParamList, RootBottomTabParamList, RootSeasonalTopTabParamList, RootFavoritesTopTabParamList } from './type';
-import { BottomTabNavigatorCustom, TopTabNavigatorCustom } from '../components';
+import { BottomTabNavigatorCustom } from '../components';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs/lib/typescript/src/types';
-import { ListScreen, TopListScreen, SeasonalListScreen, AnimeDetailScreen, MangaDetailScreen } from '../screens/Stack';
+import { SplashScreen, ListScreen, TopListScreen, SeasonalListScreen, AnimeDetailScreen, MangaDetailScreen } from '../screens/Stack';
 import { AnimeScreen, MangaScreen, SearchScreen } from '../screens/BottomTab';
 import { LastSeasonalScreen, NowSeasonalScreen, UpComingSeasonalScreen, ArchiveListScreen, AnimeFavoritesListScreen, MangaFavoritesListScreen } from '../screens/TopTab';
 
@@ -28,29 +26,26 @@ export default function Navigation({ colorScheme }: { colorScheme: any }) {
 }
 
 function RootNavigator() {
+  const lightTheme = useLightAppTheme();
+
   return (
     <Stack.Navigator>
+      <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="ListScreen" component={ListScreen} options={{ headerTitle: 'Anime List', headerTitleAlign: 'center' }} />
-      <Stack.Screen name="TopListScreen" component={TopListScreen} options={{ headerTitle: 'Top List', headerTitleAlign: 'center' }} />
-      <Stack.Screen name="SeasonalListScreen" component={SeasonalListScreen} options={{ headerTitle: 'Seasonal Anime List', headerTitleAlign: 'center' }} />
-      <Stack.Screen name="AnimeDetailScreen" component={AnimeDetailScreen} options={{ headerTitle: 'Anime Detail', headerTitleAlign: 'center' }} />
-      <Stack.Screen name="MangaDetailScreen" component={MangaDetailScreen} options={{ headerTitle: 'Manga Detail', headerTitleAlign: 'center' }} />
+      <Stack.Screen name="ListScreen" component={ListScreen} options={({ route }) => ({ title: route.params.type === 'anime' ? 'Anime List' : 'Manga List', headerTitleAlign: 'center', headerTitleStyle: { fontSize: 12, fontFamily: 'poppins-regular' }, headerStyle: { backgroundColor: lightTheme.topTabBackgroundColor } })} />
+      <Stack.Screen name="TopListScreen" component={TopListScreen} options={({ route }) => ({ title: route.params.types === 'anime' ? 'Top Anime List' : 'Top Manga List', headerTitleAlign: 'center', headerTitleStyle: { fontSize: 12, fontFamily: 'poppins-regular' }, headerStyle: { backgroundColor: lightTheme.topTabBackgroundColor } })} />
+      <Stack.Screen name="SeasonalListScreen" component={SeasonalListScreen} options={{ headerTitle: 'Seasonal Anime List', headerTitleAlign: 'center', headerTitleStyle: { fontSize: 12, fontFamily: 'poppins-regular' }, headerStyle: { backgroundColor: lightTheme.topTabBackgroundColor } }} />
+      <Stack.Screen name="AnimeDetailScreen" component={AnimeDetailScreen} options={{ headerTitle: 'Anime Detail', headerTitleAlign: 'center', headerTitleStyle: { fontSize: 12, fontFamily: 'poppins-regular' }, headerStyle: { backgroundColor: lightTheme.topTabBackgroundColor } }} />
+      <Stack.Screen name="MangaDetailScreen" component={MangaDetailScreen} options={{ headerTitle: 'Manga Detail', headerTitleAlign: 'center', headerTitleStyle: { fontSize: 12, fontFamily: 'poppins-regular' }, headerStyle: { backgroundColor: lightTheme.topTabBackgroundColor } }} />
     </Stack.Navigator>
   );
 }
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Anime"
-      // screenOptions={{
-      //   tabBarActiveTintColor: Colors[colorScheme].tint,
-      // }}
       tabBar={(props: BottomTabBarProps) => <BottomTabNavigatorCustom {...props} />}
-      
     >
       <BottomTab.Screen
         name="Anime"
@@ -82,18 +77,12 @@ function BottomTabNavigator() {
 }
 
 function SeasonalTopTabNavigator() {
-  const colorScheme = useColorScheme();
+  const lightTheme = useLightAppTheme();
 
   return (
     <SeasonalTopTab.Navigator
       initialRouteName='Now'
-      screenOptions={{
-        // tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarStyle: {
-          marginTop: StatusBar.currentHeight || 0,
-        }
-      }}
-      tabBar={(props: MaterialTopTabBarProps) => <TopTabNavigatorCustom {...props} />}
+      screenOptions={{ tabBarStyle: { marginTop: StatusBar.currentHeight || 0, backgroundColor: lightTheme.topTabBackgroundColor }, tabBarActiveTintColor: 'rgba(0, 102, 255, 1)', tabBarInactiveTintColor: lightTheme.textSolidPrimaryColor, tabBarIndicatorStyle: { backgroundColor: 'rgba(0, 102, 255, 1)' }, tabBarLabelStyle: { fontFamily: 'poppins-regular', fontSize: 12, padding: 0, margin: 0, textTransform: 'capitalize'} }}
     >
       <SeasonalTopTab.Screen
         name='Last'
@@ -116,18 +105,12 @@ function SeasonalTopTabNavigator() {
 }
 
 function FavoritesTopTabNavigator() {
-  const colorScheme = useColorScheme();
+  const lightTheme = useLightAppTheme();
 
   return (
     <FavoritesTopTab.Navigator
       initialRouteName='Anime'
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarStyle: {
-          marginTop: StatusBar.currentHeight || 0,
-        }
-      }}
-      tabBar={(props: MaterialTopTabBarProps) => <TopTabNavigatorCustom {...props} />}
+      screenOptions={{ tabBarStyle: { marginTop: StatusBar.currentHeight || 0, backgroundColor: lightTheme.topTabBackgroundColor }, tabBarActiveTintColor: 'rgba(0, 102, 255, 1)', tabBarInactiveTintColor: lightTheme.textSolidPrimaryColor, tabBarIndicatorStyle: { backgroundColor: 'rgba(0, 102, 255, 1)' }, tabBarLabelStyle: { fontFamily: 'poppins-regular', fontSize: 12, padding: 0, margin: 0, textTransform: 'capitalize'} }}
     >
       <FavoritesTopTab.Screen
         name='Anime'

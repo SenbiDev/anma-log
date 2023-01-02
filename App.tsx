@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { View, Text } from 'react-native';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
@@ -13,14 +12,10 @@ import { LogBox } from 'react-native';
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  LogBox.ignoreAllLogs()
+  LogBox.ignoreAllLogs();
 
   if (!isLoadingComplete) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Splash Screen</Text>
-      </View>
-    )
+    return null
   } else {
     return (
       <ReduxProvider store={store}>

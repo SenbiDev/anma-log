@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { ScrollView, RefreshControl, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, RefreshControl, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import { selectUpComingSeasonalList, upComingSeasonalListAsync } from '../../../redux/reducers/upComingSeasonalListSlice';
 import { useLightAppTheme } from '../../../themes';
 import { Gap } from '../../atoms';
 import Card from '../Card';
 import { UpComingSeasonalListType } from './type';
-import { GradientBackground } from '../../atoms';
 
 function UpComingSeasonalList({ navigation }: UpComingSeasonalListType) {
   const lightTheme = useLightAppTheme()
@@ -52,10 +51,10 @@ function UpComingSeasonalList({ navigation }: UpComingSeasonalListType) {
           </View>
         ))}
         {upComingSeasonalList.value.length === 0 &&
-          <View style={{ alignItems: 'center' }}>
-            <GradientBackground paddingHorizontal={25} paddingVertical={10} onPress={onRefresh}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={onRefresh}>
               <Text style={styles.text}>{ waiting ? 'Waiting...' : 'Refresh'}</Text>
-            </GradientBackground>
+            </TouchableOpacity>
           </View>
         }
         <Gap height={70} />
@@ -75,7 +74,18 @@ const styles = StyleSheet.create<any>({
     color: 'white',
     fontSize: 10,
     fontFamily: 'poppins-semiBold'
-  }
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  button: {
+    alignSelf: 'flex-start',
+    borderRadius: 3,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    backgroundColor: 'rgba(0, 102, 255, 1)',
+  },
 });
 
 export default UpComingSeasonalList;
