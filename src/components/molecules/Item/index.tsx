@@ -65,7 +65,7 @@ const styles = StyleSheet.create<any>({
     elevation: 7,
     shadowOffset: { width: 0, height: 2 },
     shadowColor: 'black',
-    shadowOpacity: 1
+    shadowOpacity: 0.5
   }),
   touchable: {
     borderRadius: 5,
