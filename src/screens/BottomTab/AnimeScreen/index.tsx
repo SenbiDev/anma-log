@@ -14,8 +14,10 @@ import { animeGenreListAsync } from '../../../redux/reducers/animeGenreListSlice
 import { animeThemeListAsync } from '../../../redux/reducers/animeThemeListSlice';
 import { animeDemographicListAsync } from '../../../redux/reducers/animeDemographicListSlice';
 import { topThreeAnimeListAsync } from '../../../redux/reducers/topThreeAnimeListSlice';
+import { useLightAppTheme } from '../../../themes';
 
 function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
+    const lightTheme = useLightAppTheme();
     const recommendedList = useAppSelector(selectRecommendedList);
     const genreList = useAppSelector(selectAnimeGenreList);
     const themeList = useAppSelector(selectAnimeThemeList);
@@ -83,7 +85,7 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
                 <View style={styles.row}>
                     <Text style={styles.top} >Top Anime</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TopListScreen', { types: 'anime' })}>
-                        <Text style={styles.moreSolidText}>more</Text>
+                        <Text style={styles.more(lightTheme.textSolidPrimaryColor)}>more</Text>
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
@@ -93,7 +95,7 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
     container: {
         flex: 1,
         marginTop: StatusBar.currentHeight || 0,
@@ -135,10 +137,11 @@ const styles = StyleSheet.create({
         fontFamily: 'poppins-medium',
         color: 'rgba(0, 102, 255, 1)',
     },
-    moreSolidText: {
+    more: (color: string) => ({
         fontSize: 12,
         fontFamily: 'poppins-regular',
-    },
+        color: color,
+    }),
 });
 
 export default AnimeScreen;

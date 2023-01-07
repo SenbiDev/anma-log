@@ -14,8 +14,10 @@ import { mangaGenreListAsync } from '../../../redux/reducers/mangaGenreListSlice
 import { mangaThemeListAsync } from '../../../redux/reducers/mangaThemeListSlice';
 import { mangaDemographicListAsync } from '../../../redux/reducers/mangaDemographicListSlice';
 import { topThreeMangaListAsync } from '../../../redux/reducers/topThreeMangaListSlice';
+import { useLightAppTheme } from '../../../themes';
 
 function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
+    const lightTheme = useLightAppTheme();
     const recommendedList = useAppSelector(selectRecommendedMangaList);
     const genreList = useAppSelector(selectMangaGenreList);
     const themeList = useAppSelector(selectMangaThemeList);
@@ -83,7 +85,7 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
                 <View style={styles.row}>
                     <Text style={styles.top} >Top Manga</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TopListScreen', { types: 'manga' })}>
-                        <Text style={styles.moreSolidText}>more</Text>
+                        <Text style={styles.more(lightTheme.textSolidPrimaryColor)}>more</Text>
                     </TouchableOpacity>
                 </View>
                 <Gap height={15} />
@@ -93,7 +95,7 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
     container: {
         flex: 1,
         marginTop: StatusBar.currentHeight || 0,
@@ -135,9 +137,11 @@ const styles = StyleSheet.create({
         fontFamily: 'poppins-medium',
         color: 'rgba(0, 102, 255, 1)',
     },
-    moreSolidText: {
+    more: (color: string) => ({
         fontSize: 12,
-    },
+        fontFamily: 'poppins-regular',
+        color: color,
+    }),
 });
 
 export default MangaScreen;
