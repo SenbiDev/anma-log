@@ -8,7 +8,7 @@ function TopThree({ types, topThreeList, navigation }: TopThreeType) {
     return (
         <>
             {topThreeList?.map(({ mal_id, images, title, type, episodes, volumes, aired, published, members, score }, index) => (
-                <View key={index}>
+                <View key={index} style={{ marginHorizontal: 24 }}>
                     <Item types={types} mal_id={mal_id} images={images} title={title} type={type} episodes={episodes} volumes={volumes} aired={aired} published={published} members={members} score={score} navigation={navigation} />
                     <Gap height={15} />
                 </View>
