@@ -58,7 +58,7 @@ function Item({ types, mal_id, images, title, type, episodes, volumes, aired, pu
 const styles = StyleSheet.create<any>({
   card: (color: string) => ({
     backgroundColor: color,
-    width: 312,
+    width: '100%',
     height: 118,
     marginLeft: 24,
     borderRadius: 5,

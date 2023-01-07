@@ -61,7 +61,7 @@ function Card({ type, mal_id, images, title, genres, aired, published, members, 
 const styles = StyleSheet.create<any>({
   card: (color: string) => ({
     backgroundColor: color,
-    width: 312,
+    width: '100%',
     height: 257,
     marginHorizontal: 24,
     borderRadius: 5,
