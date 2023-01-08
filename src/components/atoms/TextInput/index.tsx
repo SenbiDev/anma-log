@@ -24,7 +24,7 @@ function TextInput({ text, title, onChangeText, onClearText }: TextInputType) {
 const styles = StyleSheet.create<any>({
     textInputRNP: {
         height: 38,
-        width: 217,
+        width: '73%',
         padding: 0,
         marginTop: -6,
         fontSize: 12,

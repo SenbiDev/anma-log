@@ -57,14 +57,13 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
         <ScrollView
             refreshControl={
                 <RefreshControl
-                    progressViewOffset={24}
+                    progressViewOffset={StatusBar.currentHeight}
                     refreshing={isLoading()}
                     onRefresh={onRefresh}
                 />
             }
         >
             <View style={styles.container}>
-                {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <Text style={styles.recommended} >Recommended Anime</Text>
                 <Gap height={15} />
                 <RecommendedList type='anime' recommendedList={recommendedList.value} navigation={navigation} />

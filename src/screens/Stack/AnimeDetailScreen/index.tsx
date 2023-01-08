@@ -29,7 +29,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
       const isExist = getList[0]?.mal_id ? true : false;
 
       setIsFavorited(isExist);
-    };
+    }
 
     isAnimeFavorited();
 

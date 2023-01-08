@@ -30,6 +30,7 @@ function SearchResult({ types, letter, navigation }: SearchResultType) {
 
     return (
         <ScrollView
+            style={styles.scroll}
             showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
@@ -55,6 +56,9 @@ function SearchResult({ types, letter, navigation }: SearchResultType) {
 }
 
 const styles = StyleSheet.create<any>({
+    scroll: {
+        marginHorizontal: 24,
+    },
     textContainer: {
         alignItems: 'center',
     },

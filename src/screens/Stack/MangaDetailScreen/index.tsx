@@ -29,7 +29,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
       const isExist = getList[0]?.mal_id ? true : false;
 
       setIsFavorited(isExist);
-    };
+    }
 
     isMangaFavorited();
 

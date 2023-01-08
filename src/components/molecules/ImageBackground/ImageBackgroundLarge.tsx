@@ -16,7 +16,7 @@ export default ImageBackgroundLarge
 
 const styles = StyleSheet.create({
     viewSize: {
-        width: 312,
+        width: '100%',
         height: 174,
         backgroundColor: 'rgba(0, 0, 0, 0.59)',
         borderTopLeftRadius: 5,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         padding: 0
     },
     imageSize: {
-        width: 312,
+        width: '100%',
         height: 174,
         padding: 0
     }

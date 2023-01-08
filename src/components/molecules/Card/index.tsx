@@ -63,7 +63,6 @@ const styles = StyleSheet.create<any>({
     backgroundColor: color,
     width: '100%',
     height: 257,
-    marginHorizontal: 24,
     borderRadius: 5,
     elevation: 7,
     shadowOffset: { width: 0, height: 2 },
@@ -117,6 +116,7 @@ const styles = StyleSheet.create<any>({
     fontSize: 8,
     fontFamily: 'poppins-regular',
     color: color,
+    width: 200,
   }),
   dateText: (color: string) => ({
     fontSize: 8,

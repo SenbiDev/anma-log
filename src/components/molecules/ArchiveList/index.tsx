@@ -29,6 +29,7 @@ function ArchiveList({ navigation }: ArchiveListType) {
 
     return (
         <ScrollView
+            contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
@@ -39,7 +40,7 @@ function ArchiveList({ navigation }: ArchiveListType) {
             }
         >
             {archives.value?.map(({ year, seasons }, index) => (
-                <View key={index} style={styles.container}>
+                <View key={index}>
                     <View style={styles.butonsRow}>
                         {seasons[0] &&
                             <TouchableOpacity style={styles.seasonalButton} onPress={() => navigation.navigate('SeasonalListScreen', { year, season: seasons[0] })}>
@@ -73,7 +74,7 @@ function ArchiveList({ navigation }: ArchiveListType) {
                                     <Text style={styles.text}>
                                         {year}
                                     </Text>
-                                    <Text style={[styles.text, { width: 43 }]}>
+                                    <Text style={styles.text}>
                                         {seasons[2]}
                                     </Text>
                                 </View>
@@ -109,7 +110,8 @@ function ArchiveList({ navigation }: ArchiveListType) {
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     butonsRow: {
         flexDirection: 'row',
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 5,
         backgroundColor: 'rgba(0, 102, 255, 1)',
-        width: 69,
+        width: 74,
         height: 40,
     },
     refreshButtonContainer: {

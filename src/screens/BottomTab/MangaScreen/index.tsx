@@ -57,14 +57,13 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
         <ScrollView
             refreshControl={
                 <RefreshControl
-                    progressViewOffset={24}
+                    progressViewOffset={StatusBar.currentHeight}
                     refreshing={isLoading()}
                     onRefresh={onRefresh}
                 />
             }
         >
             <View style={styles.container}>
-                {/* <StatusBar backgroundColor="#61dafb" /> */}
                 <Text style={styles.recommended} >Recommended Manga</Text>
                 <Gap height={15} />
                 <RecommendedList type='manga' recommendedList={recommendedList.value} navigation={navigation} />

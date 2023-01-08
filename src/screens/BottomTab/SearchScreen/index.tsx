@@ -50,7 +50,7 @@ const styles = StyleSheet.create<any>({
         flexDirection: 'row',
         alignItems: 'flex-start',
         backgroundColor: 'transparent',
-        marginHorizontal: 24
+        paddingHorizontal: 24
     },
     text: (color: string) => ({
         fontSize: 14,

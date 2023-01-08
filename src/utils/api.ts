@@ -242,7 +242,7 @@ export async function fetchLastSeasonalList() {
     } catch {
         alert('Failed to load last seasonal list')
     }
-};
+}
 
 export async function fetchNowSeasonalList() {
     try {
@@ -273,7 +273,7 @@ export async function fetchNowSeasonalList() {
     } catch {
         alert('Failed to load now seasonal list')
     }
-};
+}
 
 export async function fetchUpComingSeasonalList() {
     try {
@@ -304,7 +304,7 @@ export async function fetchUpComingSeasonalList() {
     } catch {
         alert('Failed to load up coming seasonal list')
     }
-};
+}
 
 export async function fetchAnimeFavoriteList() {
     try {

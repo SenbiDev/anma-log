@@ -35,6 +35,7 @@ function UpComingSeasonalList({ navigation }: UpComingSeasonalListType) {
       <Text style={styles.label(lightTheme.textSolidPrimaryColor)} >{upComingSeasonalList.seasonalName}</Text>
       <Gap height={20} />
       <ScrollView
+        style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -64,6 +65,9 @@ function UpComingSeasonalList({ navigation }: UpComingSeasonalListType) {
 }
 
 const styles = StyleSheet.create<any>({
+  scroll: {
+    marginHorizontal: 24,
+  },
   label: (color: string) => ({
     fontSize: 12,
     marginLeft: 24,

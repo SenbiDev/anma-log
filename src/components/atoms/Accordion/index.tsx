@@ -65,18 +65,6 @@ const styles = StyleSheet.create<any>({
     margin: 0,
     backgroundColor: 'transparent',
   }),
-  buttonLabel: {
-    fontSize: 12,
-    width: 39
-  },
-  button: {
-    borderWidth: 0,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 0,
-    margin: 0,
-    borderRadius: 0
-  },
   text: (color: string) => ({
     fontFamily: 'poppins-regular',
     fontSize: 12,
