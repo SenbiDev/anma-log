@@ -32,6 +32,7 @@ function TopList({ types, navigation }: TopListType) {
 
     return (
         <ScrollView
+            showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
                     progressViewOffset={-34}

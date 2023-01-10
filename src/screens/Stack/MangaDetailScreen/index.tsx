@@ -72,6 +72,7 @@ function MangaDetailScreen({ route }: RootStackScreenProps<'MangaDetailScreen'>)
   return (
     <ScrollView
       style={styles.scroll}
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
           progressViewOffset={-20}

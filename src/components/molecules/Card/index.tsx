@@ -9,6 +9,10 @@ import { CardType } from './type';
 
 function Card({ type, mal_id, images, title, genres, aired, published, members, score, navigation }: CardType) {
     const lightTheme = useLightAppTheme();
+    const US = Intl.NumberFormat("en-US", {
+      currency: "USD",
+    });
+
     return (
         <CardRNP style={styles.card(lightTheme.cardColor)}>
         <TouchableOpacity onPress={() => navigation.navigate(type === 'anime' ? 'AnimeDetailScreen' : 'MangaDetailScreen', { mal_id })}>
@@ -18,7 +22,7 @@ function Card({ type, mal_id, images, title, genres, aired, published, members, 
                 <SolidMaterialIcons name='account-circle' color='white' sizes={20} boxHeight={24} />
                 <Gap width={6} />
                 <Text style={styles.membersText}>
-                  {members} members
+                  {US.format(members)} members
                 </Text>
               </View>
               <Gap width={8} />
@@ -116,7 +120,7 @@ const styles = StyleSheet.create<any>({
     fontSize: 8,
     fontFamily: 'poppins-regular',
     color: color,
-    width: 200,
+    width: 158,
   }),
   dateText: (color: string) => ({
     fontSize: 8,

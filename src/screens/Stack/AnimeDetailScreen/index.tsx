@@ -71,6 +71,7 @@ function AnimeDetailScreen({ route }: RootStackScreenProps<'AnimeDetailScreen'>)
   return (
     <ScrollView
       style={styles.scroll}
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
           progressViewOffset={-20}

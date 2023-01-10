@@ -55,6 +55,7 @@ function MangaScreen({ navigation }: RootBottomTabScreenProps<'Manga'>) {
 
     return (
         <ScrollView
+            showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
                     progressViewOffset={StatusBar.currentHeight}

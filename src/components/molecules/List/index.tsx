@@ -81,6 +81,7 @@ function List({ types, id, navigation }: ListType) {
     return (
         <ScrollView
             style={{ marginHorizontal: 24 }}
+            showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
                     progressViewOffset={-14}

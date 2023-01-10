@@ -55,6 +55,7 @@ function AnimeScreen({ navigation }: RootBottomTabScreenProps<'Anime'>) {
 
     return (
         <ScrollView
+            showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
                     progressViewOffset={StatusBar.currentHeight}
